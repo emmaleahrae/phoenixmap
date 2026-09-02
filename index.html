@@ -219,9 +219,9 @@
   }
   .video-card .card-footer {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 12px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
   }
   .tag {
     display: inline-flex;
@@ -241,6 +241,7 @@
     flex-shrink: 0;
   }
   .video-link {
+    display: block;
     font-size: 11.5px;
     font-weight: 500;
     letter-spacing: 0.03em;
@@ -295,6 +296,20 @@
     margin-top: 4px;
   }
   .popup-link:hover { border-bottom-color: var(--ink); }
+
+  .city-label {
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 2px;
+    padding: 2px 6px;
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--ink);
+    white-space: nowrap;
+    pointer-events: none;
+  }
+  .leaflet-tooltip.city-label { background: var(--paper); box-shadow: 0 2px 8px rgba(43,38,32,0.06); }
 
   .leaflet-control-zoom-in,
   .leaflet-control-zoom-out {
@@ -354,6 +369,103 @@
     .legend { flex-wrap: wrap; max-width: calc(100% - 48px); }
   }
 
+  /* Spirit Type Modal */
+  .spirit-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(43, 38, 32, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 700;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+  }
+  .spirit-modal.show {
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  .spirit-modal-content {
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    width: 90%;
+    max-width: 500px;
+    max-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 20px 60px rgba(43, 38, 32, 0.15);
+  }
+
+  .spirit-modal-header {
+    padding: 26px;
+    border-bottom: 1px solid var(--line);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .spirit-modal-header h2 {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-weight: 600;
+    font-size: 22px;
+    margin: 0;
+    color: var(--ink);
+  }
+
+  .modal-close {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    color: var(--ink-faint);
+    padding: 0;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .modal-close:hover { color: var(--ink); }
+
+  .spirit-modal-list {
+    overflow-y: auto;
+    padding: 0;
+  }
+
+  .spirit-modal-item {
+    padding: 14px 26px;
+    border-bottom: 1px solid #f0ede7;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .spirit-modal-item:hover {
+    background: #f9f7f4;
+  }
+  .spirit-modal-item:last-child {
+    border-bottom: none;
+  }
+
+  .spirit-modal-item-name {
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-size: 14px;
+    color: var(--ink);
+    margin: 0 0 4px 0;
+  }
+
+  .spirit-modal-item-location {
+    font-size: 12px;
+    color: var(--ink-faint);
+    margin: 0;
+  }
+
   ::selection { background: var(--accent-soft); }
 </style>
 </head>
@@ -385,6 +497,16 @@
   <div class="panel-body" id="panelBody"></div>
 </div>
 
+<div class="spirit-modal" id="spiritModal">
+  <div class="spirit-modal-content">
+    <div class="spirit-modal-header">
+      <h2 id="spiritModalTitle">Angelic Spirits</h2>
+      <button class="modal-close" id="spiritModalClose">✕</button>
+    </div>
+    <div class="spirit-modal-list" id="spiritModalList"></div>
+  </div>
+</div>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/leaflet.markercluster.min.js"></script>
 
@@ -398,7 +520,96 @@
 
   const cities = [
     { name: "Lisbon", country: "Portugal", lat: 38.7223, lng: -9.1393, category: "Spiritual Mapping",
-      videos: [{ creator: "@phoenixfromphoenixx", caption: "Apollo (spirit of pride for talents/abilities) & Moloch replaced by Humility & God's anointing on true gifts", category: "Spiritual Mapping", videoUrl: "https://www.instagram.com/p/DcjXJs1jXSO/" }] }
+      date: "August 21, 2026",
+      previouslyKnownAs: "The Piercing One",
+      demonicPrincipalities: [
+        { name: "Apollo", type: "Principality", description: "The Spirit of pride for talents and abilities", alsoKnownAs: ["Lucifer", "Ra", "Frey", "Shiva", "Abaddon"] },
+        { name: "Moloch", type: "Principality", description: "The Spirit of lust for depravity, blood and violence", alsoKnownAs: ["Baphomet", "Saturn", "Kronos", "Remphan"] }
+      ],
+      rulingSpirits: [
+        { name: "The Piercing One", type: "Angelic Spirit", description: "God's Angelic power of the neutralization of wickedness" }
+      ],
+      creator: "@phoenixfromphoenixx",
+      caption: "Phoenix and Cody traveled to Lisbon August 14, 2026 to rid Portugal from Satan's strong hold which God referred to as \"the tongue of the beast\". Satan being the beast.",
+      videoUrl: "https://www.instagram.com/p/DcjXJs1jXSO/"
+    },
+    { name: "Madrid", country: "Spain", lat: 40.4168, lng: -3.7038, category: "Spiritual Mapping",
+      date: "August 7, 2026",
+      previouslyKnownAs: "The Mouth of Satan",
+      demonicPrincipalities: [
+        { name: "Satan", type: "Principality", description: "Wrath and hatred for God, Christians and the Church", alsoKnownAs: [] },
+        { name: "Baal", type: "Principality", description: "Hatred for those that you dislike, disagree with and your enemies", alsoKnownAs: [] },
+        { name: "Beelzebub", type: "Principality", description: "Wrath against innocence and those that don't deserve it", alsoKnownAs: [] },
+        { name: "Shaddai El", type: "Principality", description: "The inverse of God's title El Shaddai. The Spirit of unwillingness to obey God", alsoKnownAs: [] }
+      ],
+      rulingSpirits: [
+        { name: "Uriel", type: "Angelic Spirit", description: "The archangel of faith and revelation" }
+      ],
+      creator: "@phoenixfromphoenixx",
+      caption: "Phoenix and Cody traveled to Madrid to break down Satan's spiritual technology that Satan was using to harvest all energy from everyone and everything happening in Spain",
+      videoUrls: ["https://www.instagram.com/p/Db_ixS2jVAQ", "https://www.instagram.com/p/Db_jEoDDRtB"]
+    },
+    { name: "Barcelona", country: "Spain", lat: 41.3851, lng: 2.1734, category: "Spiritual Mapping",
+      date: "August 1, 2026",
+      previouslyKnownAs: "The Beast or The Mouth of the Beast",
+      demonicPrincipalities: [
+        { name: "Satan", type: "Principality", description: "Wrath and hatred for God, Christians and the Church. Specifically in Barcelona Satan would try and make people give into wrath or hatred for things they felt were justified or righteous", alsoKnownAs: [] },
+        { name: "He Who Causes You to Implode Massively", type: "Principality", description: "Demonic power of self destruction", alsoKnownAs: [] },
+        { name: "Saturn", type: "Principality", description: "The spirit of lust. Lust the insatiable desire to experience something you're not currently experiencing", alsoKnownAs: [] }
+      ],
+      rulingSpirits: [
+        { name: "She Who Celebrates with Joy", type: "Angelic Spirit", description: "Angelic power of celebratory joy" }
+      ],
+      creator: "@phoenixfromphoenixx",
+      caption: "Phoenix and Cody traveled to Barcelona to break down Satan's biggest stronghold spiritually",
+      videoUrl: "https://www.instagram.com/p/DbthlnXDeUI"
+    },
+    { name: "Mallorca", country: "Spain", lat: 39.5696, lng: 3.1435, category: "Spiritual Mapping",
+      date: "July 12, 2026",
+      demonicPrincipalities: [
+        { name: "Blood of Serpent Nephilim", type: "Fallen Angelic Spirits", description: "Parts of the islands were made up of massive dead Nephilim", alsoKnownAs: [] }
+      ],
+      rulingSpirits: [
+        { name: "She Who Keeps The Waters Near Shore Calm", type: "Angelic Spirit", description: "Angelic power of beautiful beaches" }
+      ],
+      creator: "@phoenixfromphoenixx",
+      caption: "Under God's command Phoenix and Cody traveled to Mallorca to rest for the week",
+      videoUrl: "https://www.instagram.com/p/DbgGfevDSN7"
+    },
+    { name: "Cairo", country: "Egypt", lat: 30.0444, lng: 31.2357, category: "Spiritual Mapping",
+      date: "June 27, 2026",
+      demonicPrincipalities: [
+        { name: "Ra", type: "Principality", description: "Spirit of Pride for family and heritage", alsoKnownAs: ["Lucifer", "Apollo", "Nergal", "Frey", "Shiva"] },
+        { name: "Osiris", type: "Principality", description: "The spirit of greed for family. God of the underworld", alsoKnownAs: [] },
+        { name: "Apophis", type: "Principality", description: "The spirit of chaos", alsoKnownAs: [] }
+      ],
+      rulingSpirits: [
+        { name: "The Warring One", type: "Angelic Spirit", description: "Angel of spiritual warfare" }
+      ],
+      creator: "@phoenixfromphoenixx",
+      caption: "Phoenix and Cody traveled to Cairo to fight in the spiritual war",
+      videoUrls: ["https://www.instagram.com/p/DadO0CrDXsH", "https://www.instagram.com/p/DadPHdYDWe0"]
+    },
+    { name: "Europe", country: "Continental", lat: 54.5260, lng: 15.2551, category: "Spiritual Mapping",
+      date: "Ongoing",
+      demonicPrincipalities: [],
+      rulingSpirits: [
+        { name: "Michael", type: "Angelic Spirit", description: "The archangel of God's divine power" }
+      ],
+      creator: "@phoenixfromphoenixx",
+      caption: "Archangel Michael serves as the ruling principality over all of Europe, maintaining God's divine power across the continent.",
+      videoUrl: "#"
+    },
+    { name: "Africa", country: "Continental", lat: -8.7832, lng: 34.5085, category: "Spiritual Mapping",
+      date: "Ongoing",
+      demonicPrincipalities: [],
+      rulingSpirits: [
+        { name: "Gabriel", type: "Angelic Spirit", description: "Archangel of spreading the gospel" }
+      ],
+      creator: "@phoenixfromphoenixx",
+      caption: "Gabriel serves as the ruling principality over all of Africa, spreading God's gospel across the continent.",
+      videoUrl: "#"
+    }
   ];
 
   // =================================================================
@@ -428,18 +639,31 @@
 
   cities.forEach(city => {
     const icon = L.divIcon({
-      html: `<div class="marker-pin"><span>${city.videos.length}</span></div>`,
+      html: `<div class="marker-pin"><span>${city.rulingSpirits.length}</span></div>`,
       iconSize: [28, 28],
       className: ''
     });
 
     const marker = L.marker([city.lat, city.lng], { icon })
       .on('click', () => openCity(city))
+      .bindTooltip(city.name, { permanent: true, direction: 'top', offset: [0, -20], className: 'city-label' })
       .bindPopup(`
         <p class="popup-city">${city.name}</p>
-        <p class="popup-count">${city.videos.length} video${city.videos.length !== 1 ? 's' : ''}</p>
-        <a class="popup-link" href="#">View details →</a>
+        <p class="popup-count">${city.rulingSpirits.length} spirit${city.rulingSpirits.length !== 1 ? 's' : ''}</p>
+        <a class="popup-link" onclick="event.preventDefault(); event.stopPropagation();" href="#">View details →</a>
       `);
+
+    marker.on('popupopen', () => {
+      const popupLink = marker.getPopup().getElement().querySelector('.popup-link');
+      if (popupLink) {
+        popupLink.onclick = (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          openCity(city);
+          marker.closePopup();
+        };
+      }
+    });
 
     markerGroup.addLayer(marker);
     markersByCity[city.name] = { marker, city };
@@ -455,22 +679,253 @@
 
   function openCity(city) {
     panelCity.textContent = city.name;
-    panelSub.textContent = `${city.country} · ${city.videos.length} video${city.videos.length !== 1 ? 's' : ''}`;
+    panelSub.textContent = city.country;
+    
+    // Remove any previously added info elements
+    const existingInfo = panelSub.parentElement.querySelectorAll('p[data-info="true"]');
+    existingInfo.forEach(el => el.remove());
+    
+    // Add previously known as info if exists
+    if (city.previouslyKnownAs) {
+      const previousInfo = document.createElement('p');
+      previousInfo.setAttribute('data-info', 'true');
+      previousInfo.style.fontSize = '10px';
+      previousInfo.style.color = 'var(--ink-soft)';
+      previousInfo.style.margin = '4px 0 0 0';
+      previousInfo.style.textTransform = 'uppercase';
+      previousInfo.style.letterSpacing = '0.02em';
+      previousInfo.textContent = 'Previously known by God as "' + city.previouslyKnownAs + '"';
+      panelSub.parentElement.insertBefore(previousInfo, panelSub.nextSibling);
+    }
+    
+    // Add date info
+    const dateInfo = document.createElement('p');
+    dateInfo.setAttribute('data-info', 'true');
+    dateInfo.style.fontSize = '10px';
+    dateInfo.style.color = 'var(--ink-soft)';
+    dateInfo.style.margin = '4px 0 0 0';
+    dateInfo.style.textTransform = 'uppercase';
+    dateInfo.style.letterSpacing = '0.02em';
+    dateInfo.textContent = 'Current as of ' + city.date;
+    panelSub.parentElement.insertBefore(dateInfo, panelSub.nextSibling);
 
     panelBody.innerHTML = '';
-    city.videos.forEach(v => {
+    
+    // Source Section Header (only if not Europe)
+    if (city.name !== "Europe") {
+      const sourceHeader = document.createElement('p');
+      sourceHeader.style.fontSize = '11.5px';
+      sourceHeader.style.letterSpacing = '0.04em';
+      sourceHeader.style.textTransform = 'uppercase';
+      sourceHeader.style.fontWeight = '500';
+      sourceHeader.style.color = 'var(--ink-soft)';
+      sourceHeader.style.margin = '0 0 10px 0';
+      sourceHeader.textContent = 'Source';
+      panelBody.appendChild(sourceHeader);
+      
+      // Details Card
       const card = document.createElement('div');
       card.className = 'video-card';
-      card.innerHTML = `
-        <p class="creator">${v.creator}</p>
-        <p class="caption">${v.caption}</p>
-        <div class="card-footer">
-          <span class="tag"><span class="tag-dot" style="background:${categoryColors[v.category]}"></span>${v.category}</span>
-          <a class="video-link" href="${v.videoUrl}" target="_blank">Watch ↗</a>
-        </div>
-      `;
+      
+      const creatorP = document.createElement('p');
+      creatorP.className = 'creator';
+      creatorP.textContent = city.creator;
+      
+      const captionP = document.createElement('p');
+      captionP.className = 'caption';
+      captionP.textContent = city.caption;
+      
+      const cardFooter = document.createElement('div');
+      cardFooter.className = 'card-footer';
+      
+      // Handle both single videoUrl and multiple videoUrls
+      const urls = city.videoUrls || (city.videoUrl ? [city.videoUrl] : []);
+      urls.forEach((url, idx) => {
+        const link = document.createElement('a');
+        link.className = 'video-link';
+        link.href = url;
+        link.target = '_blank';
+        link.textContent = urls.length > 1 ? `Part ${String.fromCharCode(65 + idx)} ↗` : 'View Post on Instagram ↗';
+        cardFooter.appendChild(link);
+      });
+      
+      card.appendChild(creatorP);
+      card.appendChild(captionP);
+      card.appendChild(cardFooter);
       panelBody.appendChild(card);
+      
+      const sourceSpacer = document.createElement('div');
+      sourceSpacer.style.height = '18px';
+      panelBody.appendChild(sourceSpacer);
+    }
+    
+    // Ruling Spirits Section
+    const spiritsSection = document.createElement('div');
+    spiritsSection.style.marginBottom = '22px';
+    
+    const spiritsHeader = document.createElement('p');
+    spiritsHeader.style.fontSize = '11.5px';
+    spiritsHeader.style.letterSpacing = '0.04em';
+    spiritsHeader.style.textTransform = 'uppercase';
+    spiritsHeader.style.fontWeight = '500';
+    spiritsHeader.style.color = 'var(--ink-soft)';
+    spiritsHeader.style.margin = '0 0 10px 0';
+    spiritsHeader.textContent = "God's Ruling Principalities";
+    spiritsSection.appendChild(spiritsHeader);
+    
+    city.rulingSpirits.forEach((spirit, spiritIdx) => {
+      const spiritItem = document.createElement('div');
+      spiritItem.style.marginBottom = '12px';
+      
+      const spiritName = document.createElement('p');
+      spiritName.style.fontSize = '13.5px';
+      spiritName.style.fontWeight = '500';
+      spiritName.style.color = 'var(--ink)';
+      spiritName.style.margin = '0 0 4px 0';
+      spiritName.style.cursor = 'pointer';
+      spiritName.style.userSelect = 'none';
+      spiritName.textContent = spirit.name + ' ▼';
+      spiritName.id = `spirit-${spiritIdx}`;
+      
+      const expandedSpirit = document.createElement('div');
+      expandedSpirit.id = `spirit-content-${spiritIdx}`;
+      expandedSpirit.style.display = 'block';
+      expandedSpirit.style.marginTop = '8px';
+      expandedSpirit.style.paddingTop = '8px';
+      expandedSpirit.style.borderTop = '1px solid #eee';
+      
+      if (spirit.description) {
+        const spiritDesc = document.createElement('p');
+        spiritDesc.style.fontSize = '12px';
+        spiritDesc.style.color = 'var(--ink-soft)';
+        spiritDesc.style.margin = '0';
+        spiritDesc.style.lineHeight = '1.4';
+        spiritDesc.textContent = spirit.description;
+        expandedSpirit.appendChild(spiritDesc);
+      }
+      
+      // Type tag - always visible, outside collapsible section
+      const typeTag = document.createElement('p');
+      typeTag.style.fontSize = '10px';
+      typeTag.style.color = 'var(--accent)';
+      typeTag.style.margin = '8px 0 0 0';
+      typeTag.style.textTransform = 'uppercase';
+      typeTag.style.letterSpacing = '0.02em';
+      typeTag.style.cursor = 'pointer';
+      typeTag.style.borderBottom = '1px solid var(--accent)';
+      typeTag.style.display = 'inline-block';
+      typeTag.textContent = spirit.type;
+      typeTag.onclick = (e) => {
+        e.stopPropagation();
+        showSpiritTypeModal(spirit.type);
+      };
+      
+      spiritName.onclick = () => {
+        const isExpanded = expandedSpirit.style.display !== 'none';
+        expandedSpirit.style.display = isExpanded ? 'none' : 'block';
+        spiritName.textContent = spirit.name + (isExpanded ? ' ▶' : ' ▼');
+      };
+      
+      spiritItem.appendChild(spiritName);
+      spiritItem.appendChild(expandedSpirit);
+      spiritItem.appendChild(typeTag);
+      spiritsSection.appendChild(spiritItem);
     });
+    
+    panelBody.appendChild(spiritsSection);
+    
+    // Demonic Principalities Section
+    const demoSection = document.createElement('div');
+    demoSection.style.borderTop = '1px solid var(--line)';
+    demoSection.style.paddingTop = '18px';
+    demoSection.style.marginBottom = '18px';
+    
+    const demoHeader = document.createElement('p');
+    demoHeader.style.fontSize = '11.5px';
+    demoHeader.style.letterSpacing = '0.04em';
+    demoHeader.style.textTransform = 'uppercase';
+    demoHeader.style.fontWeight = '500';
+    demoHeader.style.color = 'var(--ink-soft)';
+    demoHeader.style.margin = '0 0 10px 0';
+    demoHeader.textContent = 'Prior Demonic Spirits';
+    demoSection.appendChild(demoHeader);
+    
+    city.demonicPrincipalities.forEach((demo, idx) => {
+      const demoItem = document.createElement('div');
+      demoItem.style.marginBottom = '12px';
+      
+      const demoName = document.createElement('p');
+      demoName.style.fontSize = '13.5px';
+      demoName.style.fontWeight = '500';
+      demoName.style.color = 'var(--ink)';
+      demoName.style.margin = '0 0 4px 0';
+      demoName.style.cursor = 'pointer';
+      demoName.style.userSelect = 'none';
+      demoName.textContent = demo.name + ' ▶';
+      demoName.id = `demo-${idx}`;
+      
+      const expandedContent = document.createElement('div');
+      expandedContent.id = `demo-content-${idx}`;
+      expandedContent.style.display = 'none';
+      expandedContent.style.marginTop = '8px';
+      expandedContent.style.paddingTop = '8px';
+      expandedContent.style.borderTop = '1px solid #eee';
+      
+      if (demo.description) {
+        const demoDesc = document.createElement('p');
+        demoDesc.style.fontSize = '12px';
+        demoDesc.style.color = 'var(--ink-soft)';
+        demoDesc.style.margin = '0 0 8px 0';
+        demoDesc.style.lineHeight = '1.4';
+        demoDesc.textContent = demo.description;
+        expandedContent.appendChild(demoDesc);
+      }
+      
+      if (demo.alsoKnownAs && demo.alsoKnownAs.length > 0) {
+        const alsoKnownContainer = document.createElement('p');
+        alsoKnownContainer.style.fontSize = '11px';
+        alsoKnownContainer.style.color = '#666';
+        alsoKnownContainer.style.margin = '0';
+        alsoKnownContainer.innerHTML = 'Also known as: ';
+        
+        demo.alsoKnownAs.forEach((altName, altIdx) => {
+          const link = document.createElement('a');
+          link.href = '#';
+          link.style.color = 'var(--accent)';
+          link.style.textDecoration = 'none';
+          link.style.cursor = 'pointer';
+          link.style.borderBottom = '1px solid var(--accent)';
+          link.textContent = altName;
+          link.onclick = (e) => {
+            e.preventDefault();
+            searchInput.value = altName;
+            searchInput.dispatchEvent(new Event('input'));
+          };
+          alsoKnownContainer.appendChild(link);
+          
+          if (altIdx < demo.alsoKnownAs.length - 1) {
+            const comma = document.createElement('span');
+            comma.textContent = ', ';
+            alsoKnownContainer.appendChild(comma);
+          }
+        });
+        
+        expandedContent.appendChild(alsoKnownContainer);
+      }
+      
+      // Toggle functionality
+      demoName.onclick = () => {
+        const isExpanded = expandedContent.style.display !== 'none';
+        expandedContent.style.display = isExpanded ? 'none' : 'block';
+        demoName.textContent = demo.name + (isExpanded ? ' ▶' : ' ▼');
+      };
+      
+      demoItem.appendChild(demoName);
+      demoItem.appendChild(expandedContent);
+      demoSection.appendChild(demoItem);
+    });
+    
+    panelBody.appendChild(demoSection);
 
     panel.classList.add('open');
     
@@ -491,6 +946,75 @@
   });
 
   // =================================================================
+  // SPIRIT TYPE MODAL
+  // =================================================================
+  const spiritModal = document.getElementById('spiritModal');
+  const spiritModalClose = document.getElementById('spiritModalClose');
+  const spiritModalTitle = document.getElementById('spiritModalTitle');
+  const spiritModalList = document.getElementById('spiritModalList');
+
+  function showSpiritTypeModal(spiritType) {
+    // Collect all spirits of this type
+    const spiritsOfType = [];
+    cities.forEach(city => {
+      city.rulingSpirits.forEach(spirit => {
+        if (spirit.type === spiritType) {
+          spiritsOfType.push({ name: spirit.name, city: city.name, country: city.country });
+        }
+      });
+      city.demonicPrincipalities.forEach(spirit => {
+        if (spirit.type === spiritType) {
+          spiritsOfType.push({ name: spirit.name, city: city.name, country: city.country });
+        }
+      });
+    });
+
+    // Sort alphabetically by name
+    spiritsOfType.sort((a, b) => a.name.localeCompare(b.name));
+
+    // Update modal
+    spiritModalTitle.textContent = spiritType;
+    spiritModalList.innerHTML = '';
+    
+    spiritsOfType.forEach(spirit => {
+      const item = document.createElement('div');
+      item.className = 'spirit-modal-item';
+      
+      const name = document.createElement('p');
+      name.className = 'spirit-modal-item-name';
+      name.textContent = spirit.name;
+      
+      const location = document.createElement('p');
+      location.className = 'spirit-modal-item-location';
+      location.textContent = `${spirit.city}, ${spirit.country}`;
+      
+      item.appendChild(name);
+      item.appendChild(location);
+      item.onclick = () => {
+        const city = cities.find(c => c.name === spirit.city);
+        if (city) {
+          spiritModal.classList.remove('show');
+          openCity(city);
+        }
+      };
+      
+      spiritModalList.appendChild(item);
+    });
+
+    spiritModal.classList.add('show');
+  }
+
+  spiritModalClose.addEventListener('click', () => {
+    spiritModal.classList.remove('show');
+  });
+
+  spiritModal.addEventListener('click', (e) => {
+    if (e.target === spiritModal) {
+      spiritModal.classList.remove('show');
+    }
+  });
+
+  // =================================================================
   // SEARCH
   // =================================================================
   const searchInput = document.getElementById('searchInput');
@@ -501,10 +1025,25 @@
     searchResults.innerHTML = '';
     if (!term) { searchResults.classList.remove('show'); return; }
 
-    const matches = cities.filter(c => 
-      c.name.toLowerCase().includes(term) || 
-      c.country.toLowerCase().includes(term)
-    );
+    const matches = cities.filter(c => {
+      // Search city name and country
+      if (c.name.toLowerCase().includes(term) || c.country.toLowerCase().includes(term)) return true;
+      
+      // Search ruling spirits and their types
+      if (c.rulingSpirits.some(s => 
+        s.name.toLowerCase().includes(term) || 
+        s.type.toLowerCase().includes(term)
+      )) return true;
+      
+      // Search demonic principalities, their types and alternate names
+      if (c.demonicPrincipalities.some(d => {
+        if (d.name.toLowerCase().includes(term) || d.type.toLowerCase().includes(term)) return true;
+        if (d.alsoKnownAs && d.alsoKnownAs.some(alt => alt.toLowerCase().includes(term))) return true;
+        return false;
+      })) return true;
+      
+      return false;
+    });
 
     if (matches.length === 0) { searchResults.classList.remove('show'); return; }
 
