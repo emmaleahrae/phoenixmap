@@ -1825,16 +1825,50 @@
     
     const typeTag = document.createElement('p');
     typeTag.className = 'spirit-profile-type';
-    // Prepend "Demonic" for demonic spirits
-    const displayType = spiritType === 'demonic' ? `Demonic ${mainSpirit.type}` : mainSpirit.type;
-    typeTag.textContent = displayType;
+    typeTag.textContent = mainSpirit.type; // Just show the type as-is
     
     headerContent.appendChild(title);
     headerContent.appendChild(typeTag);
+    
+    // Add ranking tag if this spirit is in the Top 7
+    if (mainSpirit.topRanking) {
+      const rankingTag = document.createElement('p');
+      rankingTag.className = 'spirit-profile-ranking';
+      rankingTag.style.fontSize = '12px';
+      rankingTag.style.color = 'var(--accent)';
+      rankingTag.style.margin = '4px 0 0 0';
+      rankingTag.style.fontWeight = '600';
+      rankingTag.textContent = `#${mainSpirit.topRanking} in Satan's Kingdom of Darkness`;
+      headerContent.appendChild(rankingTag);
+    }
+    
+    // Add main spirit description
+    if (mainSpirit.description) {
+      const mainDesc = document.createElement('p');
+      mainDesc.className = 'spirit-profile-main-description';
+      mainDesc.style.fontSize = '12px';
+      mainDesc.style.color = 'var(--ink-soft)';
+      mainDesc.style.margin = '8px 0 0 0';
+      mainDesc.style.lineHeight = '1.4';
+      mainDesc.textContent = mainSpirit.description;
+      headerContent.appendChild(mainDesc);
+    }
+    
     spiritProfileHeader.appendChild(headerContent);
 
     // Build profile body
     spiritProfileBody.innerHTML = '';
+    
+    // Add "Manifestations in:" header for location descriptions
+    const manifestHeader = document.createElement('p');
+    manifestHeader.style.fontSize = '11.5px';
+    manifestHeader.style.letterSpacing = '0.04em';
+    manifestHeader.style.textTransform = 'uppercase';
+    manifestHeader.style.fontWeight = '500';
+    manifestHeader.style.color = 'var(--ink-soft)';
+    manifestHeader.style.margin = '12px 0 8px 0';
+    manifestHeader.textContent = 'Manifestations in:';
+    spiritProfileBody.appendChild(manifestHeader);
 
     // Description section - show all unique descriptions by location
     const descriptionsByLocation = [];
