@@ -1539,14 +1539,39 @@
         expandedContent.appendChild(alsoKnownContainer);
       }
       
-      // Toggle functionality
+      // Toggle collapse/expand functionality
       demoName.onclick = (e) => {
         e.stopPropagation();
-        showSpiritProfile(demo.name);
+        const isOpen = expandedContent.style.display !== 'none';
+        if (isOpen) {
+          expandedContent.style.display = 'none';
+          demoName.textContent = demo.name + ' ▶';
+        } else {
+          expandedContent.style.display = 'block';
+          demoName.textContent = demo.name + ' ▼';
+          showSpiritProfile(demo.name);
+        }
+      };
+      
+      // Type tag - always visible, outside collapsible section
+      const demoTypeTag = document.createElement('p');
+      demoTypeTag.style.fontSize = '10px';
+      demoTypeTag.style.color = 'var(--accent)';
+      demoTypeTag.style.margin = '8px 0 0 0';
+      demoTypeTag.style.textTransform = 'uppercase';
+      demoTypeTag.style.letterSpacing = '0.02em';
+      demoTypeTag.style.cursor = 'pointer';
+      demoTypeTag.style.borderBottom = '1px solid var(--accent)';
+      demoTypeTag.style.display = 'inline-block';
+      demoTypeTag.textContent = demo.type;
+      demoTypeTag.onclick = (e) => {
+        e.stopPropagation();
+        showSpiritTypeModal(demo.type);
       };
       
       demoItem.appendChild(demoName);
       demoItem.appendChild(expandedContent);
+      demoItem.appendChild(demoTypeTag);
       demoSection.appendChild(demoItem);
     });
     
