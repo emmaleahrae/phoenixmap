@@ -1870,12 +1870,12 @@
     manifestHeader.textContent = 'Manifestations in:';
     spiritProfileBody.appendChild(manifestHeader);
 
-    // Description section - show all unique descriptions by location
+    // Description section - show only this spirit's descriptions by location
     const descriptionsByLocation = [];
     for (let city of cities) {
-      // Check ruling spirits
+      // Check ruling spirits - only match the main spirit's name
       for (let spirit of city.rulingSpirits) {
-        if (spirit.name === displayName || (spirit.alsoKnownAs && spirit.alsoKnownAs.includes(displayName))) {
+        if (spirit.name === mainSpirit.name) {
           descriptionsByLocation.push({
             description: spirit.description,
             city: city.name,
@@ -1884,9 +1884,9 @@
         }
       }
 
-      // Check demonic spirits
+      // Check demonic spirits - only match the main spirit's name
       for (let spirit of city.demonicPrincipalities) {
-        if (spirit.name === displayName || (spirit.alsoKnownAs && spirit.alsoKnownAs.includes(displayName))) {
+        if (spirit.name === mainSpirit.name) {
           descriptionsByLocation.push({
             description: spirit.description,
             city: city.name,
