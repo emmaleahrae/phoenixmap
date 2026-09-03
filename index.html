@@ -1364,7 +1364,7 @@
     demoHeader.style.fontWeight = '500';
     demoHeader.style.color = 'var(--ink-soft)';
     demoHeader.style.margin = '0 0 10px 0';
-    demoHeader.textContent = 'Prior Demonic Spirits';
+    demoHeader.textContent = city.demonicPrincipalities.length === 1 ? 'Prior Demonic Principality' : 'Prior Demonic Principalities';
     demoSection.appendChild(demoHeader);
     
     city.demonicPrincipalities.forEach((demo, idx) => {
