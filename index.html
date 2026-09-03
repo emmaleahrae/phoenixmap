@@ -1199,6 +1199,7 @@
   // ===== legend =====
   const legendEl = document.getElementById('legend');
   const activeFilters = new Set(Object.keys(categoryColors)); // All filters active by default
+  const filterButtons = {}; // Store references for updating
   
   function updateMarkerVisibility() {
     Object.entries(markersByCity).forEach(([cityName, { marker, city }]) => {
@@ -1215,32 +1216,49 @@
     });
   }
   
+  function updateButtonStyle(name, color, isActive) {
+    const btn = filterButtons[name];
+    if (isActive) {
+      btn.style.backgroundColor = color + '33'; // Transparent version of color
+      btn.style.fontWeight = '600';
+      btn.style.color = 'var(--ink)';
+    } else {
+      btn.style.backgroundColor = 'transparent';
+      btn.style.fontWeight = '400';
+      btn.style.color = 'var(--ink-soft)';
+    }
+  }
+  
   Object.entries(categoryColors).forEach(([name, color]) => {
     const item = document.createElement('div');
     item.className = 'legend-item';
     item.style.cursor = 'pointer';
-    item.style.padding = '4px 8px';
-    item.style.borderRadius = '3px';
-    item.style.border = '2px solid transparent';
+    item.style.padding = '6px 10px';
+    item.style.borderRadius = '4px';
     item.style.userSelect = 'none';
+    item.style.transition = 'all 0.2s ease';
+    item.style.border = '1px solid var(--line)';
     item.innerHTML = `<span class="legend-dot" style="background:${color}"></span>${name}`;
+    
+    filterButtons[name] = item;
+    updateButtonStyle(name, color, true); // Start active
+    
+    item.onmouseover = () => {
+      item.style.boxShadow = '0 1px 3px rgba(43,38,32,0.1)';
+    };
+    item.onmouseout = () => {
+      item.style.boxShadow = 'none';
+    };
     
     item.onclick = () => {
       if (activeFilters.has(name)) {
         activeFilters.delete(name);
-        item.style.opacity = '0.5';
-        item.style.border = '2px solid transparent';
       } else {
         activeFilters.add(name);
-        item.style.opacity = '1';
-        item.style.border = `2px solid ${color}`;
       }
+      updateButtonStyle(name, color, activeFilters.has(name));
       updateMarkerVisibility();
     };
-    
-    // Set initial active state
-    item.style.opacity = '1';
-    item.style.border = `2px solid ${color}`;
     
     legendEl.appendChild(item);
   });
