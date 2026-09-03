@@ -1144,7 +1144,10 @@
       spiritName.style.userSelect = 'none';
       spiritName.style.textDecoration = 'underline';
       spiritName.style.textDecorationColor = 'var(--accent)';
-      spiritName.textContent = spirit.name + ' ▼';
+      // Only show arrow if there's a description AND only one ruling spirit
+      const hasMultipleRuling = city.rulingSpirits.length > 1;
+      const arrow = (spirit.description && !hasMultipleRuling) ? ' ▼' : '';
+      spiritName.textContent = spirit.name + arrow;
       spiritName.id = `spirit-${spiritIdx}`;
       spiritName.title = 'Click to view spirit profile';
       spiritName.onmouseover = () => {
