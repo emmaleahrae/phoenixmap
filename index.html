@@ -572,6 +572,8 @@
   .spirit-modal-list {
     overflow-y: auto;
     padding: 0;
+    flex: 1;
+    max-height: 70vh;
   }
 
   .spirit-modal-item {
@@ -671,7 +673,8 @@
     "Demonic Principality": "#8b6f47",
     "Angelic Principality": "#7a9d6e",
     "Elemental Spirit": "#6b8e8f",
-    "Fallen Angelic Spirits": "#8b7a9d"
+    "Fallen Angelic Spirits": "#8b7a9d",
+    "Top 7 Kingdom of Darkness": "#d4a574"
   };
 
   const cities = [
@@ -917,7 +920,7 @@
       ],
       creator: "@phoenixfromphoenixx",
       caption: "The Eiffel Tower is spiritually an antenna that magnifies whatever spirit is touching it and spreads that energy of what that spirit embodies across the entire world. Now The Shining One touches it.",
-      videoUrls: ["https://www.instagram.com/p/DU6ahvwjSU3", "https://www.instagram.com/p/DVJRJzVjRJM", "https://www.instagram.com/p/DVb1MkCDYzS", "https://www.instagram.com/p/DVjg-JGDTkL"]
+      videoUrls: ["https://www.instagram.com/p/DVJRJzVjRJM"]
     },
     { name: "Paris", country: "France", lat: 48.8566, lng: 2.3522, category: "Spiritual Mapping",
       date: "January 29, 2026",
@@ -1207,7 +1210,14 @@
       // Check if city has any spirits matching active filters
       const hasMatchingSpirit = 
         city.rulingSpirits.some(s => activeFilters.has(s.type)) ||
-        city.demonicPrincipalities.some(s => activeFilters.has(s.type));
+        city.demonicPrincipalities.some(s => {
+          // Check type filter
+          const matchesType = activeFilters.has(s.type);
+          // Check Top 7 filter
+          const isTop7 = s.topRanking !== undefined;
+          const matchesTop7 = activeFilters.has("Top 7 Kingdom of Darkness") && isTop7;
+          return matchesType || matchesTop7;
+        });
       
       if (hasMatchingSpirit) {
         markerGroup.addLayer(marker);
@@ -1397,7 +1407,7 @@
         link.className = 'video-link';
         link.href = url;
         link.target = '_blank';
-        link.textContent = urls.length > 1 ? `Part ${String.fromCharCode(65 + idx)} ↗` : 'View Post on Instagram ↗';
+        link.textContent = urls.length > 1 ? `View Part ${idx + 1} Post on Instagram ↗` : 'View Post on Instagram ↗';
         cardFooter.appendChild(link);
       });
       
@@ -1542,7 +1552,7 @@
       demoName.style.userSelect = 'none';
       demoName.style.textDecoration = 'underline';
       demoName.style.textDecorationColor = 'var(--accent)';
-      demoName.textContent = demo.name + ' ▶';
+      demoName.textContent = demo.name + (demo.topRanking ? ` #${demo.topRanking} in Kingdom of Darkness` : '') + ' ▶';
       demoName.id = `demo-${idx}`;
       demoName.title = 'Click to view spirit profile';
       demoName.onmouseover = () => {
@@ -1750,6 +1760,72 @@
     }
   });
 
+  function showTop7Modal() {
+    // Get all Top 7 spirits ranked by topRanking
+    const top7Spirits = [];
+    cities.forEach(city => {
+      city.demonicPrincipalities.forEach(spirit => {
+        if (spirit.topRanking && !top7Spirits.find(s => s.name === spirit.name)) {
+          top7Spirits.push({
+            name: spirit.name,
+            ranking: spirit.topRanking,
+            description: spirit.description,
+            aliases: spirit.alsoKnownAs || []
+          });
+        }
+      });
+    });
+
+    // Sort by ranking
+    top7Spirits.sort((a, b) => a.ranking - b.ranking);
+
+    // Update modal
+    spiritModalTitle.textContent = 'Kingdom of Darkness - Top 7';
+    spiritModalList.innerHTML = '';
+    
+    top7Spirits.forEach(spirit => {
+      const item = document.createElement('div');
+      item.className = 'spirit-modal-item';
+      
+      const rankAndName = document.createElement('p');
+      rankAndName.className = 'spirit-modal-item-name';
+      rankAndName.style.fontWeight = '600';
+      rankAndName.textContent = `#${spirit.ranking} - ${spirit.name}`;
+      rankAndName.style.cursor = 'pointer';
+      rankAndName.onclick = (e) => {
+        e.stopPropagation();
+        spiritModal.classList.remove('show');
+        showSpiritProfile(spirit.name);
+      };
+      
+      item.appendChild(rankAndName);
+      
+      if (spirit.description) {
+        const desc = document.createElement('p');
+        desc.style.fontSize = '11px';
+        desc.style.color = 'var(--ink-soft)';
+        desc.style.margin = '4px 0 0 0';
+        desc.style.lineHeight = '1.4';
+        desc.textContent = spirit.description;
+        item.appendChild(desc);
+      }
+      
+      if (spirit.aliases.length > 0) {
+        const aliasLabel = document.createElement('p');
+        aliasLabel.style.fontSize = '10px';
+        aliasLabel.style.color = 'var(--ink-faint)';
+        aliasLabel.style.margin = '6px 0 0 0';
+        aliasLabel.style.fontStyle = 'italic';
+        aliasLabel.textContent = `Also known as: ${spirit.aliases.join(', ')}`;
+        item.appendChild(aliasLabel);
+      }
+      
+      spiritModalList.appendChild(item);
+    });
+
+    spiritModal.classList.add('show');
+  }
+
   // =================================================================
   // SPIRIT PROFILE PANEL
   // =================================================================
@@ -1820,7 +1896,19 @@
       rankingTag.style.color = 'var(--accent)';
       rankingTag.style.margin = '4px 0 0 0';
       rankingTag.style.fontWeight = '600';
-      rankingTag.textContent = `#${mainSpirit.topRanking} in Satan's Kingdom of Darkness`;
+      rankingTag.style.cursor = 'pointer';
+      rankingTag.style.textDecoration = 'underline';
+      rankingTag.textContent = `#${mainSpirit.topRanking} in Kingdom of Darkness`;
+      rankingTag.onclick = (e) => {
+        e.stopPropagation();
+        showTop7Modal();
+      };
+      rankingTag.onmouseover = () => {
+        rankingTag.style.opacity = '0.7';
+      };
+      rankingTag.onmouseout = () => {
+        rankingTag.style.opacity = '1';
+      };
       headerContent.appendChild(rankingTag);
     }
     
@@ -1993,16 +2081,16 @@
         }
       }
       
-      // If spirit is in this city, collect its Instagram links
+      // If spirit is in this city, collect its Instagram links with location tracking
       if (hasSpirit) {
         if (city.videoUrls && Array.isArray(city.videoUrls)) {
-          city.videoUrls.forEach(url => {
+          city.videoUrls.forEach((url, urlIdx) => {
             if (url !== '#') {
-              instagramPosts.push({ url, city: city.name, country: city.country });
+              instagramPosts.push({ url, city: city.name, country: city.country, urlIndex: urlIdx, totalUrlsForCity: city.videoUrls.length });
             }
           });
         } else if (city.videoUrl && city.videoUrl !== '#') {
-          instagramPosts.push({ url: city.videoUrl, city: city.name, country: city.country });
+          instagramPosts.push({ url: city.videoUrl, city: city.name, country: city.country, urlIndex: 0, totalUrlsForCity: 1 });
         }
       }
     }
@@ -2043,7 +2131,10 @@
         postCity.style.fontSize = '12px';
         postCity.style.margin = '0 0 2px 0';
         postCity.style.color = 'var(--ink)';
-        postCity.textContent = `${post.city}, ${post.country}`;
+        
+        // Show Part X if the location has multiple posts
+        const partNumber = post.totalUrlsForCity > 1 ? ` - Part ${post.urlIndex + 1}` : '';
+        postCity.textContent = `${post.city}, ${post.country}${partNumber}`;
         
         const postLabel = document.createElement('p');
         postLabel.style.fontSize = '11px';
