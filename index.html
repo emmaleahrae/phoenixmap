@@ -1198,10 +1198,50 @@
 
   // ===== legend =====
   const legendEl = document.getElementById('legend');
+  const activeFilters = new Set(Object.keys(categoryColors)); // All filters active by default
+  
+  function updateMarkerVisibility() {
+    Object.entries(markersByCity).forEach(([cityName, { marker, city }]) => {
+      // Check if city has any spirits matching active filters
+      const hasMatchingSpirit = 
+        city.rulingSpirits.some(s => activeFilters.has(s.type)) ||
+        city.demonicPrincipalities.some(s => activeFilters.has(s.type));
+      
+      if (hasMatchingSpirit) {
+        markerGroup.addLayer(marker);
+      } else {
+        markerGroup.removeLayer(marker);
+      }
+    });
+  }
+  
   Object.entries(categoryColors).forEach(([name, color]) => {
     const item = document.createElement('div');
     item.className = 'legend-item';
+    item.style.cursor = 'pointer';
+    item.style.padding = '4px 8px';
+    item.style.borderRadius = '3px';
+    item.style.border = '2px solid transparent';
+    item.style.userSelect = 'none';
     item.innerHTML = `<span class="legend-dot" style="background:${color}"></span>${name}`;
+    
+    item.onclick = () => {
+      if (activeFilters.has(name)) {
+        activeFilters.delete(name);
+        item.style.opacity = '0.5';
+        item.style.border = '2px solid transparent';
+      } else {
+        activeFilters.add(name);
+        item.style.opacity = '1';
+        item.style.border = `2px solid ${color}`;
+      }
+      updateMarkerVisibility();
+    };
+    
+    // Set initial active state
+    item.style.opacity = '1';
+    item.style.border = `2px solid ${color}`;
+    
     legendEl.appendChild(item);
   });
 
