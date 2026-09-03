@@ -1840,62 +1840,6 @@
 
     // Build profile body
     spiritProfileBody.innerHTML = '';
-    
-    // Add "Manifestations in:" header for location descriptions
-    const manifestHeader = document.createElement('p');
-    manifestHeader.style.fontSize = '11.5px';
-    manifestHeader.style.letterSpacing = '0.04em';
-    manifestHeader.style.textTransform = 'uppercase';
-    manifestHeader.style.fontWeight = '500';
-    manifestHeader.style.color = 'var(--ink-soft)';
-    manifestHeader.style.margin = '12px 0 8px 0';
-    manifestHeader.textContent = 'Manifestations in:';
-    spiritProfileBody.appendChild(manifestHeader);
-
-    // Description section - show only this spirit's descriptions by location
-    const descriptionsByLocation = [];
-    for (let city of cities) {
-      // Check ruling spirits - only match the main spirit's name
-      for (let spirit of city.rulingSpirits) {
-        if (spirit.name === mainSpirit.name) {
-          descriptionsByLocation.push({
-            description: spirit.description,
-            city: city.name,
-            country: city.country
-          });
-        }
-      }
-
-      // Check demonic spirits - only match the main spirit's name
-      for (let spirit of city.demonicPrincipalities) {
-        if (spirit.name === mainSpirit.name) {
-          descriptionsByLocation.push({
-            description: spirit.description,
-            city: city.name,
-            country: city.country
-          });
-        }
-      }
-    }
-
-    if (descriptionsByLocation.length > 0) {
-      const descSection = document.createElement('div');
-      descSection.className = 'spirit-profile-section';
-      
-      descriptionsByLocation.forEach((desc, idx) => {
-        const descP = document.createElement('p');
-        descP.className = 'spirit-profile-description';
-        descP.innerHTML = `<strong>${desc.city}, ${desc.country}:</strong><br>${desc.description}`;
-        descSection.appendChild(descP);
-        
-        // Add spacing between multiple descriptions
-        if (idx < descriptionsByLocation.length - 1) {
-          descP.style.marginBottom = '12px';
-        }
-      });
-      
-      spiritProfileBody.appendChild(descSection);
-    }
 
     // Alternate names section
     if (mainSpirit.alsoKnownAs && mainSpirit.alsoKnownAs.length > 0) {
