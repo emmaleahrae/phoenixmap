@@ -1783,28 +1783,87 @@
     spiritModalTitle.textContent = 'Kingdom of Darkness - Top 7';
     spiritModalList.innerHTML = '';
     
+    // Add explanation header
+    const explanationHeader = document.createElement('div');
+    explanationHeader.style.padding = '20px 26px';
+    explanationHeader.style.borderBottom = '1px solid var(--line)';
+    explanationHeader.style.backgroundColor = 'rgba(169, 120, 79, 0.08)';
+    
+    const explanationTitle = document.createElement('p');
+    explanationTitle.style.fontSize = '12px';
+    explanationTitle.style.fontWeight = '600';
+    explanationTitle.style.color = 'var(--accent)';
+    explanationTitle.style.margin = '0 0 8px 0';
+    explanationTitle.style.textTransform = 'uppercase';
+    explanationTitle.style.letterSpacing = '0.05em';
+    explanationTitle.textContent = 'Ranking of Satan\'s Highest Powers';
+    explanationHeader.appendChild(explanationTitle);
+    
+    const explanationText = document.createElement('p');
+    explanationText.style.fontSize = '12px';
+    explanationText.style.color = 'var(--ink-soft)';
+    explanationText.style.margin = '0';
+    explanationText.style.lineHeight = '1.5';
+    explanationText.textContent = 'These are the 7 most powerful demonic principalities in Satan\'s kingdom, ranked by their authority and influence over territorial and spiritual matters across the world.';
+    explanationHeader.appendChild(explanationText);
+    
+    spiritModalList.appendChild(explanationHeader);
+    
     top7Spirits.forEach(spirit => {
       const item = document.createElement('div');
       item.className = 'spirit-modal-item';
+      item.style.paddingLeft = '26px';
+      item.style.paddingRight = '26px';
+      
+      const rankBadge = document.createElement('div');
+      rankBadge.style.display = 'flex';
+      rankBadge.style.alignItems = 'center';
+      rankBadge.style.gap = '12px';
+      rankBadge.style.marginBottom = '6px';
+      
+      const rankNumber = document.createElement('span');
+      rankNumber.style.display = 'inline-flex';
+      rankNumber.style.alignItems = 'center';
+      rankNumber.style.justifyContent = 'center';
+      rankNumber.style.width = '28px';
+      rankNumber.style.height = '28px';
+      rankNumber.style.backgroundColor = 'var(--accent)';
+      rankNumber.style.color = 'white';
+      rankNumber.style.borderRadius = '50%';
+      rankNumber.style.fontSize = '12px';
+      rankNumber.style.fontWeight = '700';
+      rankNumber.textContent = spirit.ranking;
+      rankBadge.appendChild(rankNumber);
       
       const rankAndName = document.createElement('p');
       rankAndName.className = 'spirit-modal-item-name';
       rankAndName.style.fontWeight = '600';
-      rankAndName.textContent = `#${spirit.ranking} - ${spirit.name}`;
+      rankAndName.style.fontSize = '14px';
+      rankAndName.style.margin = '0';
+      rankAndName.textContent = spirit.name;
       rankAndName.style.cursor = 'pointer';
+      rankAndName.style.color = 'var(--accent)';
+      rankAndName.style.textDecoration = 'underline';
       rankAndName.onclick = (e) => {
         e.stopPropagation();
         spiritModal.classList.remove('show');
         showSpiritProfile(spirit.name);
       };
+      rankAndName.onmouseover = () => {
+        rankAndName.style.opacity = '0.7';
+      };
+      rankAndName.onmouseout = () => {
+        rankAndName.style.opacity = '1';
+      };
+      rankBadge.appendChild(rankAndName);
       
-      item.appendChild(rankAndName);
+      item.appendChild(rankBadge);
       
       if (spirit.description) {
         const desc = document.createElement('p');
-        desc.style.fontSize = '11px';
+        desc.style.fontSize = '12px';
         desc.style.color = 'var(--ink-soft)';
-        desc.style.margin = '4px 0 0 0';
+        desc.style.margin = '8px 0 0 40px';
         desc.style.lineHeight = '1.4';
         desc.textContent = spirit.description;
         item.appendChild(desc);
@@ -1812,9 +1871,9 @@
       
       if (spirit.aliases.length > 0) {
         const aliasLabel = document.createElement('p');
-        aliasLabel.style.fontSize = '10px';
+        aliasLabel.style.fontSize = '11px';
         aliasLabel.style.color = 'var(--ink-faint)';
-        aliasLabel.style.margin = '6px 0 0 0';
+        aliasLabel.style.margin = '6px 0 0 40px';
         aliasLabel.style.fontStyle = 'italic';
         aliasLabel.textContent = `Also known as: ${spirit.aliases.join(', ')}`;
         item.appendChild(aliasLabel);
