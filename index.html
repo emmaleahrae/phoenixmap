@@ -1144,10 +1144,7 @@
       spiritName.style.userSelect = 'none';
       spiritName.style.textDecoration = 'underline';
       spiritName.style.textDecorationColor = 'var(--accent)';
-      // Only show arrow if there's a description AND only one ruling spirit
-      const hasMultipleRuling = city.rulingSpirits.length > 1;
-      const arrow = (spirit.description && !hasMultipleRuling) ? ' ▼' : '';
-      spiritName.textContent = spirit.name + arrow;
+      spiritName.textContent = spirit.name + ' ▼';
       spiritName.id = `spirit-${spiritIdx}`;
       spiritName.title = 'Click to view spirit profile';
       spiritName.onmouseover = () => {
@@ -1164,9 +1161,17 @@
       expandedSpirit.style.paddingTop = '8px';
       expandedSpirit.style.borderTop = '1px solid #eee';
       
+      // Toggle collapse/expand functionality
       spiritName.onclick = (e) => {
         e.stopPropagation();
-        showSpiritProfile(spirit.name);
+        const isOpen = expandedSpirit.style.display !== 'none';
+        if (isOpen) {
+          expandedSpirit.style.display = 'none';
+          spiritName.textContent = spirit.name + ' ▶';
+        } else {
+          expandedSpirit.style.display = 'block';
+          spiritName.textContent = spirit.name + ' ▼';
+        }
       };
       
       if (spirit.description) {
