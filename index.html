@@ -642,7 +642,7 @@
     <p>Locations from around the world.</p>
   </div>
   <div class="search-wrap">
-    <input type="text" class="search-input" id="searchInput" placeholder="Search city..." autocomplete="off" />
+    <input type="text" class="search-input" id="searchInput" placeholder="Search city or principality..." autocomplete="off" />
     <div class="search-results" id="searchResults"></div>
   </div>
 </div>
@@ -3061,11 +3061,12 @@
       // Search city name and country
       if (c.name.toLowerCase().includes(term) || c.country.toLowerCase().includes(term)) return true;
       
-      // Search ruling spirits and their types
-      if (c.rulingSpirits.some(s => 
-        s.name.toLowerCase().includes(term) || 
-        s.type.toLowerCase().includes(term)
-      )) return true;
+      // Search ruling spirits, their types, and alternate names
+      if (c.rulingSpirits.some(s => {
+        if (s.name.toLowerCase().includes(term) || s.type.toLowerCase().includes(term)) return true;
+        if (s.alsoKnownAs && s.alsoKnownAs.some(alt => alt.toLowerCase().includes(term))) return true;
+        return false;
+      })) return true;
       
       // Search demonic principalities, their types and alternate names
       if (c.demonicPrincipalities.some(d => {
