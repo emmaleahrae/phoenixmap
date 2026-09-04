@@ -1555,13 +1555,42 @@
       
       // Primary names blurb - always show
       const primaryBlurb = document.createElement('p');
-      primaryBlurb.style.fontSize = '11px';
-      primaryBlurb.style.color = '#999';
-      primaryBlurb.style.margin = '0 0 8px 0';
-      primaryBlurb.style.lineHeight = '1.4';
-      primaryBlurb.style.fontStyle = 'italic';
+      primaryBlurb.style.fontSize = '12px';
+      primaryBlurb.style.color = 'var(--ink-soft)';
+      primaryBlurb.style.margin = '0 0 12px 0';
+      primaryBlurb.style.lineHeight = '1.5';
+      primaryBlurb.style.fontStyle = 'normal';
+      primaryBlurb.style.paddingBottom = '12px';
+      primaryBlurb.style.borderBottom = '1px solid #f0ede7';
       primaryBlurb.textContent = `This spirit is known by many names across different cultures and religions, but is fundamentally the same demonic or angelic force.`;
       expandedSpirit.appendChild(primaryBlurb);
+      
+      // Also Known As section
+      if (spirit.alsoKnownAs && spirit.alsoKnownAs.length > 0) {
+        const altSection = document.createElement('div');
+        altSection.style.marginTop = '12px';
+        
+        const altTitle = document.createElement('p');
+        altTitle.style.fontSize = '11.5px';
+        altTitle.style.letterSpacing = '0.04em';
+        altTitle.style.textTransform = 'uppercase';
+        altTitle.style.fontWeight = '500';
+        altTitle.style.color = 'var(--ink-soft)';
+        altTitle.style.margin = '0 0 8px 0';
+        altTitle.textContent = 'Also Known As';
+        altSection.appendChild(altTitle);
+        
+        spirit.alsoKnownAs.forEach(name => {
+          const altItem = document.createElement('p');
+          altItem.style.fontSize = '12px';
+          altItem.style.color = 'var(--ink)';
+          altItem.style.margin = '4px 0 0 0';
+          altItem.textContent = name;
+          altSection.appendChild(altItem);
+        });
+        
+        expandedSpirit.appendChild(altSection);
+      }
       
       // Type tag - always visible, outside collapsible section
       const typeTag = document.createElement('p');
