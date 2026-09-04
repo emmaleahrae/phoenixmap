@@ -2262,10 +2262,13 @@
       }
     }
 
-    // Check spirits not yet tied to a location (e.g. Top 7 spirits pending location data)
-    if (!mainSpirit) {
-      for (let spirit of unassignedTop7Spirits) {
-        if (identityGroup.has(spirit.name)) {
+    // Check spirits not yet tied to a location (e.g. Top 7 spirits pending
+    // location data). Use the same topRanking-priority logic as the cities
+    // loop above, so a ranked entry here can still take over as mainSpirit
+    // even if a non-ranked city entry (like Shaddai El) was found first.
+    for (let spirit of unassignedTop7Spirits) {
+      if (identityGroup.has(spirit.name)) {
+        if (spirit.topRanking || !mainSpirit) {
           mainSpirit = spirit;
           spiritType = 'demonic';
         }
