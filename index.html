@@ -2992,7 +2992,7 @@
         url: 'https://www.instagram.com/p/DXQHNpPD9OQ', 
         city: 'Kingdom of Light', 
         country: 'Explanation', 
-        isTop7: true,
+        isTop7Light: true,
         urlIndex: 0, 
         totalUrlsForCity: 1 
       });
@@ -3036,7 +3036,9 @@
         postCity.style.margin = '0 0 2px 0';
         postCity.style.color = 'var(--ink)';
         
-        if (post.isTop7) {
+        if (post.isTop7Light) {
+          postCity.textContent = 'Top 7 of God\'s Kingdom of Light Explained';
+        } else if (post.isTop7) {
           postCity.textContent = 'Top 7 of Satan\'s Kingdom of darkness Explained';
         } else {
           const partNumber = post.totalUrlsForCity > 1 ? ` - Part ${post.urlIndex + 1}` : '';
