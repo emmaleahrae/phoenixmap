@@ -2205,6 +2205,16 @@
     // Build profile body
     spiritProfileBody.innerHTML = '';
     
+    // Add primary names blurb
+    const primaryNamesBlurb = document.createElement('p');
+    primaryNamesBlurb.style.fontSize = '11px';
+    primaryNamesBlurb.style.color = '#999';
+    primaryNamesBlurb.style.margin = '0 0 12px 0';
+    primaryNamesBlurb.style.lineHeight = '1.4';
+    primaryNamesBlurb.style.fontStyle = 'italic';
+    primaryNamesBlurb.textContent = `This spirit is known by many names across different cultures and religions, but is fundamentally the same demonic or angelic force.`;
+    spiritProfileBody.appendChild(primaryNamesBlurb);
+    
     // Add "Manifestations in:" header for location descriptions
     const manifestHeader = document.createElement('p');
     manifestHeader.style.fontSize = '11.5px';
