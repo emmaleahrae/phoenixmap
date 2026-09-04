@@ -1527,7 +1527,7 @@
       spiritName.style.userSelect = 'none';
       spiritName.style.textDecoration = 'underline';
       spiritName.style.textDecorationColor = 'var(--accent)';
-      spiritName.textContent = spirit.name + ' ▼';
+      spiritName.textContent = spirit.name + ' ▼︎';
       spiritName.id = `spirit-${spiritIdx}`;
       spiritName.title = 'Click to view spirit profile';
       spiritName.onmouseover = () => {
@@ -1667,7 +1667,7 @@
       demoName.style.userSelect = 'none';
       demoName.style.textDecoration = 'underline';
       demoName.style.textDecorationColor = 'var(--accent)';
-      demoName.textContent = demo.name + (demo.topRanking ? ` Ranked ${getOrdinal(demo.topRanking)} in kingdom of darkness` : '') + ' ▶';
+      demoName.textContent = demo.name + (demo.topRanking ? ` Ranked ${getOrdinal(demo.topRanking)} in kingdom of darkness` : '') + ' ▶︎';
       demoName.id = `demo-${idx}`;
       demoName.title = 'Click to view spirit profile';
       demoName.onmouseover = () => {
