@@ -1802,6 +1802,7 @@
   }
 
   function showTop7Panel() {
+    console.log('showTop7Panel called');
     // Get all Top 7 spirits ranked by topRanking
     const top7Spirits = [];
     cities.forEach(city => {
@@ -1941,7 +1942,9 @@
     panelBody.appendChild(spiritsSection);
     
     // Open the panel
+    console.log('Opening panel, top7Spirits count:', top7Spirits.length);
     panel.classList.add('open');
+    console.log('Panel open class added');
   }
 
   spiritModalClose.addEventListener('click', () => {
