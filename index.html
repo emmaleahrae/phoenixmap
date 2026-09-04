@@ -700,7 +700,7 @@
     "Elemental Spirit": "#6b8e8f",
     "Fallen Angelic Spirits": "#8b7a9d",
     "Top 7 kingdom of darkness": "#d4a574",
-    "Top 7 kingdom of light": "#c9a86a"
+    "Top 7 kingdom of Light": "#c9a86a"
   };
 
   // Top 7 spirits not yet tied to a specific location on the map
@@ -708,7 +708,7 @@
     { name: "Ouranos", type: "Demonic Principality", description: "The spirit of unwillingness (sloth / laziness)", alsoKnownAs: ["Uranus", "Nut", "Shu", "Shaddai El"], topRanking: 7 }
   ];
 
-  // Top 7 kingdom of light beings not yet tied to a specific location on the map
+  // Top 7 kingdom of Light beings not yet tied to a specific location on the map
   const unassignedTop7Light = [
     { name: "The Holy Spirit", type: "Divine Principality", description: "The spirit that lives in all who believe in the savior of Jesus Christ. The One that bestows spiritual gifts upon believers as He sees fit.", mainDescription: "The spirit that lives in all who believe in the savior of Jesus Christ. The One that bestows spiritual gifts upon believers as He sees fit.", lightRanking: 3 },
     { name: "Raphael", type: "Angelic Principality", description: "An archangel. The embodiment of God's healing power. Helps the brethren of Christ restore, heal, and spiritually cleanse according to God's will.", mainDescription: "An archangel. The embodiment of God's healing power. Helps the brethren of Christ restore, heal, and spiritually cleanse according to God's will.", lightRanking: 6 }
@@ -1243,7 +1243,7 @@
   const panelCity = document.getElementById('panelCity');
   const panelSub = document.getElementById('panelSub');
   const panelBody = document.getElementById('panelBody');
-  const activeFilters = new Set(Object.keys(categoryColors).filter(name => name !== "Top 7 kingdom of darkness" && name !== "Top 7 kingdom of light")); // All filters active except both Top 7 filters by default
+  const activeFilters = new Set(Object.keys(categoryColors).filter(name => name !== "Top 7 kingdom of darkness" && name !== "Top 7 kingdom of Light")); // All filters active except both Top 7 filters by default
   const DEFAULT_FILTERS = new Set(activeFilters); // Store the default filter state
   const filterButtons = {}; // Store references for updating
   
@@ -1276,7 +1276,7 @@
     item.innerHTML = `<span class="legend-dot" style="background:${color}"></span>${name}`;
     
     filterButtons[name] = item;
-    const isActive = name !== "Top 7 kingdom of darkness" && name !== "Top 7 kingdom of light"; // Both Top 7 filters start inactive
+    const isActive = name !== "Top 7 kingdom of darkness" && name !== "Top 7 kingdom of Light"; // Both Top 7 filters start inactive
     updateButtonStyle(name, color, isActive);
     
     item.onmouseover = () => {
@@ -1304,8 +1304,8 @@
         }
       }
 
-      // If Top 7 kingdom of light filter was just toggled
-      if (name === "Top 7 kingdom of light") {
+      // If Top 7 kingdom of Light filter was just toggled
+      if (name === "Top 7 kingdom of Light") {
         if (activeFilters.has(name)) {
           showTop7LightPanel(); // Show panel when filter activated
         } else {
@@ -1380,7 +1380,7 @@
         city.rulingSpirits.some(s => {
           const matchesType = activeFilters.has(s.type);
           const isTop7Light = s.lightRanking !== undefined;
-          const matchesTop7Light = activeFilters.has("Top 7 kingdom of light") && isTop7Light;
+          const matchesTop7Light = activeFilters.has("Top 7 kingdom of Light") && isTop7Light;
           return matchesType || matchesTop7Light;
         }) ||
         city.demonicPrincipalities.some(s => {
@@ -1505,7 +1505,7 @@
         
         // Check if this is a Top 7 explanation post
         if (url === top7PostUrl) {
-          link.textContent = 'Top 7 of Satan\'s Kingdom of Darkness Explained ↗';
+          link.textContent = 'Top 7 of Satan\'s Kingdom of darkness Explained ↗';
         } else if (url === top7LightPostUrl) {
           link.textContent = 'Top 7 of God\'s Kingdom of Light Explained ↗';
         } else {
@@ -1551,7 +1551,7 @@
       spiritName.style.userSelect = 'none';
       spiritName.style.textDecoration = 'underline';
       spiritName.style.textDecorationColor = 'var(--accent)';
-      spiritName.textContent = spirit.name + (spirit.lightRanking ? ` Ranked ${getOrdinal(spirit.lightRanking)} in kingdom of light` : '') + ' ▼︎';
+      spiritName.textContent = spirit.name + (spirit.lightRanking ? ` Ranked ${getOrdinal(spirit.lightRanking)} in kingdom of Light` : '') + ' ▼︎';
       spiritName.id = `spirit-${spiritIdx}`;
       spiritName.title = 'Click to view spirit profile';
       spiritName.onmouseover = () => {
@@ -2056,7 +2056,7 @@
   }
 
   function showTop7LightPanel() {
-    // Get all Top 7 kingdom of light beings ranked by lightRanking
+    // Get all Top 7 kingdom of Light beings ranked by lightRanking
     const top7Spirits = [];
     cities.forEach(city => {
       city.rulingSpirits.forEach(spirit => {
@@ -2085,7 +2085,7 @@
     top7Spirits.sort((a, b) => a.ranking - b.ranking);
 
     // Update side panel header
-    panelCity.textContent = 'Kingdom of light ranking';
+    panelCity.textContent = 'Kingdom of Light ranking';
     panelSub.textContent = '';
     
     // Remove any previously added info elements
@@ -2381,7 +2381,7 @@
   }
 
   function showTop7LightModal() {
-    // Get all Top 7 kingdom of light beings ranked by lightRanking
+    // Get all Top 7 kingdom of Light beings ranked by lightRanking
     const top7Spirits = [];
     cities.forEach(city => {
       city.rulingSpirits.forEach(spirit => {
@@ -2410,7 +2410,7 @@
     top7Spirits.sort((a, b) => a.ranking - b.ranking);
 
     // Update modal - matches showTop7LightPanel format exactly
-    spiritModalTitle.textContent = 'Kingdom of light ranking';
+    spiritModalTitle.textContent = 'Kingdom of Light ranking';
     spiritModalList.innerHTML = '';
 
     // Add explanation section
@@ -2650,7 +2650,7 @@
       }
     }
 
-    // Check Top 7 kingdom of light beings not yet tied to a location
+    // Check Top 7 kingdom of Light beings not yet tied to a location
     for (let spirit of unassignedTop7Light) {
       if (identityGroup.has(spirit.name)) {
         if (spirit.lightRanking || !mainSpirit) {
@@ -2707,7 +2707,7 @@
       rankingTag.style.fontWeight = '600';
       rankingTag.style.cursor = 'pointer';
       rankingTag.style.textDecoration = 'underline';
-      rankingTag.textContent = `Ranked ${getOrdinal(mainSpirit.lightRanking)} in kingdom of light`;
+      rankingTag.textContent = `Ranked ${getOrdinal(mainSpirit.lightRanking)} in kingdom of Light`;
       rankingTag.onclick = (e) => {
         e.stopPropagation();
         showTop7LightModal();
@@ -2950,11 +2950,11 @@
       }
     }
 
-    // Add Top 7 explanation post if this spirit is in the Kingdom of Darkness
+    // Add Top 7 explanation post if this spirit is in the Kingdom of darkness
     if (mainSpirit.topRanking) {
       instagramPosts.push({ 
         url: 'https://www.instagram.com/p/DXVP3z0DyyO', 
-        city: 'Kingdom of Darkness', 
+        city: 'Kingdom of darkness', 
         country: 'Explanation', 
         isTop7: true,
         urlIndex: 0, 
@@ -3013,7 +3013,7 @@
         postCity.style.color = 'var(--ink)';
         
         if (post.isTop7) {
-          postCity.textContent = 'Top 7 of Satan\'s Kingdom of Darkness Explained';
+          postCity.textContent = 'Top 7 of Satan\'s Kingdom of darkness Explained';
         } else {
           const partNumber = post.totalUrlsForCity > 1 ? ` - Part ${post.urlIndex + 1}` : '';
           postCity.textContent = `${post.city}, ${post.country}${partNumber}`;
