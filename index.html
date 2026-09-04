@@ -1872,7 +1872,7 @@
           top7Spirits.push({
             name: spirit.name,
             ranking: spirit.topRanking,
-            description: spirit.description,
+            description: spirit.mainDescription || spirit.description,
             aliases: spirit.alsoKnownAs || []
           });
         }
@@ -1883,7 +1883,7 @@
         top7Spirits.push({
           name: spirit.name,
           ranking: spirit.topRanking,
-          description: spirit.description,
+          description: spirit.mainDescription || spirit.description,
           aliases: spirit.alsoKnownAs || []
         });
       }
@@ -2035,7 +2035,7 @@
           top7Spirits.push({
             name: spirit.name,
             ranking: spirit.topRanking,
-            description: spirit.description,
+            description: spirit.mainDescription || spirit.description,
             aliases: spirit.alsoKnownAs || []
           });
         }
@@ -2046,7 +2046,7 @@
         top7Spirits.push({
           name: spirit.name,
           ranking: spirit.topRanking,
-          description: spirit.description,
+          description: spirit.mainDescription || spirit.description,
           aliases: spirit.alsoKnownAs || []
         });
       }
