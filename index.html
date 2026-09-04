@@ -2055,108 +2055,121 @@
     // Sort by ranking
     top7Spirits.sort((a, b) => a.ranking - b.ranking);
 
-    // Update modal
-    spiritModalTitle.textContent = 'Kingdom of Darkness - Top 7';
+    // Update modal - matches showTop7Panel format exactly
+    spiritModalTitle.textContent = 'Kingdom of Darkness - Top 7 Ranking';
     spiritModalList.innerHTML = '';
-    
-    // Add explanation header
-    const explanationHeader = document.createElement('div');
-    explanationHeader.style.padding = '20px 26px';
-    explanationHeader.style.borderBottom = '1px solid var(--line)';
-    explanationHeader.style.backgroundColor = 'rgba(169, 120, 79, 0.08)';
-    
+
+    // Add explanation section
+    const explanationSection = document.createElement('div');
+    explanationSection.style.marginBottom = '22px';
+    explanationSection.style.padding = '20px 26px 0 26px';
+
     const explanationTitle = document.createElement('p');
-    explanationTitle.style.fontSize = '12px';
-    explanationTitle.style.fontWeight = '600';
-    explanationTitle.style.color = 'var(--accent)';
-    explanationTitle.style.margin = '0 0 8px 0';
+    explanationTitle.style.fontSize = '11.5px';
+    explanationTitle.style.letterSpacing = '0.04em';
     explanationTitle.style.textTransform = 'uppercase';
-    explanationTitle.style.letterSpacing = '0.05em';
-    explanationTitle.textContent = 'Ranking of Satan\'s Highest Powers';
-    explanationHeader.appendChild(explanationTitle);
-    
+    explanationTitle.style.fontWeight = '500';
+    explanationTitle.style.color = 'var(--ink-soft)';
+    explanationTitle.style.margin = '0 0 10px 0';
+    explanationTitle.textContent = 'About the Top 7';
+    explanationSection.appendChild(explanationTitle);
+
     const explanationText = document.createElement('p');
     explanationText.style.fontSize = '12px';
     explanationText.style.color = 'var(--ink-soft)';
-    explanationText.style.margin = '0';
+    explanationText.style.margin = '0 0 14px 0';
     explanationText.style.lineHeight = '1.5';
     explanationText.textContent = 'These are the 7 most powerful demonic principalities in Satan\'s kingdom, ranked by their authority and influence over territorial and spiritual matters across the world.';
-    explanationHeader.appendChild(explanationText);
-    
-    spiritModalList.appendChild(explanationHeader);
-    
-    top7Spirits.forEach(spirit => {
-      const item = document.createElement('div');
-      item.className = 'spirit-modal-item';
-      item.style.paddingLeft = '26px';
-      item.style.paddingRight = '26px';
-      
+    explanationSection.appendChild(explanationText);
+
+    spiritModalList.appendChild(explanationSection);
+
+    // Add Top 7 spirits list
+    const spiritsSection = document.createElement('div');
+    spiritsSection.style.marginBottom = '18px';
+    spiritsSection.style.padding = '0 26px';
+
+    const spiritsHeader = document.createElement('p');
+    spiritsHeader.style.fontSize = '11.5px';
+    spiritsHeader.style.letterSpacing = '0.04em';
+    spiritsHeader.style.textTransform = 'uppercase';
+    spiritsHeader.style.fontWeight = '500';
+    spiritsHeader.style.color = 'var(--ink-soft)';
+    spiritsHeader.style.margin = '0 0 12px 0';
+    spiritsHeader.textContent = 'The Hierarchy';
+    spiritsSection.appendChild(spiritsHeader);
+
+    top7Spirits.forEach((spirit, idx) => {
+      const spiritItem = document.createElement('div');
+      spiritItem.style.marginBottom = '14px';
+      spiritItem.style.paddingBottom = '14px';
+      if (idx < top7Spirits.length - 1) {
+        spiritItem.style.borderBottom = '1px solid var(--line)';
+      }
+
+      const rankContainer = document.createElement('div');
+      rankContainer.style.display = 'flex';
+      rankContainer.style.alignItems = 'center';
+      rankContainer.style.gap = '10px';
+      rankContainer.style.marginBottom = '6px';
+
       const rankBadge = document.createElement('div');
       rankBadge.style.display = 'flex';
       rankBadge.style.alignItems = 'center';
-      rankBadge.style.gap = '12px';
-      rankBadge.style.marginBottom = '6px';
-      
-      const rankNumber = document.createElement('span');
-      rankNumber.style.display = 'inline-flex';
-      rankNumber.style.alignItems = 'center';
-      rankNumber.style.justifyContent = 'center';
-      rankNumber.style.width = '28px';
-      rankNumber.style.height = '28px';
-      rankNumber.style.backgroundColor = 'var(--accent)';
-      rankNumber.style.color = 'white';
-      rankNumber.style.borderRadius = '50%';
-      rankNumber.style.fontSize = '12px';
-      rankNumber.style.fontWeight = '700';
-      rankNumber.textContent = spirit.ranking;
-      rankBadge.appendChild(rankNumber);
-      
-      const rankAndName = document.createElement('p');
-      rankAndName.className = 'spirit-modal-item-name';
-      rankAndName.style.fontWeight = '600';
-      rankAndName.style.fontSize = '14px';
-      rankAndName.style.margin = '0';
-      rankAndName.textContent = spirit.name;
-      rankAndName.style.cursor = 'pointer';
-      rankAndName.style.color = 'var(--accent)';
-      rankAndName.style.textDecoration = 'underline';
-      rankAndName.onclick = (e) => {
+      rankBadge.style.justifyContent = 'center';
+      rankBadge.style.width = '24px';
+      rankBadge.style.height = '24px';
+      rankBadge.style.backgroundColor = 'var(--accent)';
+      rankBadge.style.color = 'white';
+      rankBadge.style.borderRadius = '50%';
+      rankBadge.style.fontSize = '11px';
+      rankBadge.style.fontWeight = '700';
+      rankBadge.textContent = spirit.ranking;
+      rankContainer.appendChild(rankBadge);
+
+      const spiritName = document.createElement('p');
+      spiritName.style.fontSize = '13.5px';
+      spiritName.style.fontWeight = '500';
+      spiritName.style.color = 'var(--accent)';
+      spiritName.style.margin = '0';
+      spiritName.style.cursor = 'pointer';
+      spiritName.style.textDecoration = 'underline';
+      spiritName.textContent = spirit.name;
+      spiritName.onmouseover = () => { spiritName.style.opacity = '0.7'; };
+      spiritName.onmouseout = () => { spiritName.style.opacity = '1'; };
+      spiritName.onclick = (e) => {
         e.stopPropagation();
         spiritModal.classList.remove('show');
         showSpiritProfile(spirit.name);
       };
-      rankAndName.onmouseover = () => {
-        rankAndName.style.opacity = '0.7';
-      };
-      rankAndName.onmouseout = () => {
-        rankAndName.style.opacity = '1';
-      };
-      rankBadge.appendChild(rankAndName);
-      
-      item.appendChild(rankBadge);
-      
+      rankContainer.appendChild(spiritName);
+
+      spiritItem.appendChild(rankContainer);
+
       if (spirit.description) {
         const desc = document.createElement('p');
-        desc.style.fontSize = '12px';
+        desc.style.fontSize = '11px';
         desc.style.color = 'var(--ink-soft)';
-        desc.style.margin = '8px 0 0 40px';
+        desc.style.margin = '6px 0 0 34px';
         desc.style.lineHeight = '1.4';
         desc.textContent = spirit.description;
-        item.appendChild(desc);
+        spiritItem.appendChild(desc);
       }
-      
+
       if (spirit.aliases.length > 0) {
         const aliasLabel = document.createElement('p');
-        aliasLabel.style.fontSize = '11px';
+        aliasLabel.style.fontSize = '10px';
         aliasLabel.style.color = 'var(--ink-faint)';
-        aliasLabel.style.margin = '6px 0 0 40px';
+        aliasLabel.style.margin = '4px 0 0 34px';
         aliasLabel.style.fontStyle = 'italic';
-        aliasLabel.textContent = `Also known as: ${spirit.aliases.join(', ')}`;
-        item.appendChild(aliasLabel);
+        aliasLabel.textContent = `Also: ${spirit.aliases.join(', ')}`;
+        spiritItem.appendChild(aliasLabel);
       }
-      
-      spiritModalList.appendChild(item);
+
+      spiritsSection.appendChild(spiritItem);
     });
+
+    spiritModalList.appendChild(spiritsSection);
 
     spiritModal.classList.add('show');
   }
