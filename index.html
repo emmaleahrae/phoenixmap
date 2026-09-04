@@ -2286,12 +2286,21 @@
     manifestHeader.textContent = 'Manifestations in:';
     spiritProfileBody.appendChild(manifestHeader);
 
-    // Description section - show only this spirit's descriptions by location
+    // Description section - show this spirit's descriptions by location,
+    // matching by identity (name or any alias) so cultural names like
+    // Ra/Apollo all resolve to the same underlying spirit as Lucifer
+    const isSameSpirit = (spirit) => {
+      if (spirit.name === mainSpirit.name) return true;
+      if (spirit.alsoKnownAs && spirit.alsoKnownAs.includes(mainSpirit.name)) return true;
+      if (mainSpirit.alsoKnownAs && mainSpirit.alsoKnownAs.includes(spirit.name)) return true;
+      return false;
+    };
+
     const descriptionsByLocation = [];
     for (let city of cities) {
-      // Check ruling spirits - only match the main spirit's name
+      // Check ruling spirits - match by identity (name or alias)
       for (let spirit of city.rulingSpirits) {
-        if (spirit.name === mainSpirit.name) {
+        if (isSameSpirit(spirit)) {
           descriptionsByLocation.push({
             description: spirit.description,
             city: city.name,
@@ -2300,9 +2309,9 @@
         }
       }
 
-      // Check demonic spirits - only match the main spirit's name
+      // Check demonic spirits - match by identity (name or alias)
       for (let spirit of city.demonicPrincipalities) {
-        if (spirit.name === mainSpirit.name) {
+        if (isSameSpirit(spirit)) {
           descriptionsByLocation.push({
             description: spirit.description,
             city: city.name,
