@@ -1226,25 +1226,7 @@
   const filterButtons = {}; // Store references for updating
   
   function updateMarkerVisibility() {
-    Object.entries(markersByCity).forEach(([cityName, { marker, city }]) => {
-      // Check if city has any spirits matching active filters
-      const hasMatchingSpirit = 
-        city.rulingSpirits.some(s => activeFilters.has(s.type)) ||
-        city.demonicPrincipalities.some(s => {
-          // Check type filter
-          const matchesType = activeFilters.has(s.type);
-          // Check Top 7 filter
-          const isTop7 = s.topRanking !== undefined;
-          const matchesTop7 = activeFilters.has("Top 7 Kingdom of Darkness") && isTop7;
-          return matchesType || matchesTop7;
-        });
-      
-      if (hasMatchingSpirit) {
-        markerGroup.addLayer(marker);
-      } else {
-        markerGroup.removeLayer(marker);
-      }
-    });
+    updateMarkersByZoom();
   }
   
   function updateButtonStyle(name, color, isActive) {
@@ -1309,6 +1291,16 @@
   const markerGroup = L.featureGroup().addTo(map);
   const markersByCity = {};
 
+  // Define zoom levels and location types
+  function getLocationZoomLevel(city) {
+    if (city.country === 'Continental') return 0; // Always show continental
+    if (city.name.includes('Temple') || city.name.includes('River') || city.name.includes('Eiffel') || city.name.includes('Louvre')) return 5; // Specific monuments
+    if (city.country.length > 15) return 2; // Countries (typically longer names)
+    return 3; // Cities
+  }
+
+  const locationZoomLevels = {};
+
   cities.forEach(city => {
     const icon = L.divIcon({
       html: `<div class="marker-pin"><span>${city.rulingSpirits.length}</span></div>`,
@@ -1339,7 +1331,41 @@
 
     markerGroup.addLayer(marker);
     markersByCity[city.name] = { marker, city };
+    locationZoomLevels[city.name] = getLocationZoomLevel(city);
   });
+
+  // Update marker visibility based on zoom level
+  function updateMarkersByZoom() {
+    const currentZoom = map.getZoom();
+    Object.entries(markersByCity).forEach(([cityName, { marker, city }]) => {
+      const requiredZoom = locationZoomLevels[cityName];
+      const shouldShow = currentZoom >= requiredZoom;
+      
+      if (shouldShow && activeFilters.size > 0) {
+        // Check if city matches active filters
+        const hasMatchingSpirit = 
+          city.rulingSpirits.some(s => activeFilters.has(s.type)) ||
+          city.demonicPrincipalities.some(s => {
+            const matchesType = activeFilters.has(s.type);
+            const isTop7 = s.topRanking !== undefined;
+            const matchesTop7 = activeFilters.has("Top 7 Kingdom of Darkness") && isTop7;
+            return matchesType || matchesTop7;
+          });
+        
+        if (hasMatchingSpirit) {
+          markerGroup.addLayer(marker);
+        } else {
+          markerGroup.removeLayer(marker);
+        }
+      } else {
+        markerGroup.removeLayer(marker);
+      }
+    });
+  }
+
+  // Listen to zoom changes
+  map.on('zoomend', updateMarkersByZoom);
+  updateMarkersByZoom(); // Initial update
 
   // =================================================================
   // PANEL
