@@ -2129,12 +2129,15 @@
     let foundLocations = [];
 
     // Search for the spirit in all cities - match by name OR by alias
+    // PRIORITIZE finding entries with topRanking first
     for (let city of cities) {
       // Check ruling spirits
       for (let spirit of city.rulingSpirits) {
         if (spirit.name === spiritName || (spirit.alsoKnownAs && spirit.alsoKnownAs.includes(spiritName))) {
-          mainSpirit = spirit;
-          spiritType = 'ruling';
+          if (spirit.topRanking || !mainSpirit) {
+            mainSpirit = spirit;
+            spiritType = 'ruling';
+          }
           foundLocations.push({ 
             name: city.name, 
             country: city.country, 
@@ -2147,8 +2150,10 @@
       // Check demonic spirits
       for (let spirit of city.demonicPrincipalities) {
         if (spirit.name === spiritName || (spirit.alsoKnownAs && spirit.alsoKnownAs.includes(spiritName))) {
-          mainSpirit = spirit;
-          spiritType = 'demonic';
+          if (spirit.topRanking || !mainSpirit) {
+            mainSpirit = spirit;
+            spiritType = 'demonic';
+          }
           foundLocations.push({ 
             name: city.name, 
             country: city.country, 
