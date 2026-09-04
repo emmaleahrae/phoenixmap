@@ -2328,6 +2328,50 @@
 
     // Build profile body
     spiritProfileBody.innerHTML = '';
+
+    // Add primary names blurb before alternate names (only if spirit has aliases)
+    if (mainSpirit.alsoKnownAs && mainSpirit.alsoKnownAs.length > 0) {
+      const primaryNamesBlurb = document.createElement('p');
+      primaryNamesBlurb.style.fontSize = '12px';
+      primaryNamesBlurb.style.color = 'var(--ink-soft)';
+      primaryNamesBlurb.style.margin = '0 0 14px 0';
+      primaryNamesBlurb.style.lineHeight = '1.5';
+      primaryNamesBlurb.style.fontStyle = 'normal';
+      primaryNamesBlurb.style.paddingBottom = '14px';
+      primaryNamesBlurb.style.borderBottom = '1px solid #f0ede7';
+      primaryNamesBlurb.textContent = mainSpirit.type === 'Demonic Principality'
+        ? `This spirit is known by many names across different cultures and religions, but is fundamentally the same demonic principality.`
+        : `This spirit is known by many names across different cultures and religions, but is fundamentally the same demonic or angelic force.`;
+      spiritProfileBody.appendChild(primaryNamesBlurb);
+    }
+
+    // Alternate names section
+    if (mainSpirit.alsoKnownAs && mainSpirit.alsoKnownAs.length > 0) {
+      const altSection = document.createElement('div');
+      altSection.className = 'spirit-profile-section';
+      
+      const altTitle = document.createElement('p');
+      altTitle.className = 'spirit-profile-section-title';
+      altTitle.textContent = 'Also Known As';
+      altSection.appendChild(altTitle);
+      
+      // Show all alternate names
+      const allNames = [mainSpirit.name, ...mainSpirit.alsoKnownAs];
+      allNames.forEach(name => {
+        if (name !== displayName) { // Don't show the current name as an alternate
+          const altItem = document.createElement('p');
+          altItem.className = 'spirit-profile-item';
+          altItem.style.cursor = 'pointer';
+          altItem.style.textDecoration = 'underline';
+          altItem.style.color = 'var(--ink)';
+          altItem.textContent = name;
+          altItem.onclick = () => showSpiritProfile(name); // Pass the alias name directly
+          altSection.appendChild(altItem);
+        }
+      });
+      
+      spiritProfileBody.appendChild(altSection);
+    }
     
     // Add "Manifestations in:" header for location descriptions
     const manifestHeader = document.createElement('p');
@@ -2410,50 +2454,6 @@
       });
       
       spiritProfileBody.appendChild(descSection);
-    }
-
-    // Add primary names blurb before alternate names (only if spirit has aliases)
-    if (mainSpirit.alsoKnownAs && mainSpirit.alsoKnownAs.length > 0) {
-      const primaryNamesBlurb = document.createElement('p');
-      primaryNamesBlurb.style.fontSize = '12px';
-      primaryNamesBlurb.style.color = 'var(--ink-soft)';
-      primaryNamesBlurb.style.margin = '0 0 14px 0';
-      primaryNamesBlurb.style.lineHeight = '1.5';
-      primaryNamesBlurb.style.fontStyle = 'normal';
-      primaryNamesBlurb.style.paddingBottom = '14px';
-      primaryNamesBlurb.style.borderBottom = '1px solid #f0ede7';
-      primaryNamesBlurb.textContent = mainSpirit.type === 'Demonic Principality'
-        ? `This spirit is known by many names across different cultures and religions, but is fundamentally the same demonic principality.`
-        : `This spirit is known by many names across different cultures and religions, but is fundamentally the same demonic or angelic force.`;
-      spiritProfileBody.appendChild(primaryNamesBlurb);
-    }
-
-    // Alternate names section
-    if (mainSpirit.alsoKnownAs && mainSpirit.alsoKnownAs.length > 0) {
-      const altSection = document.createElement('div');
-      altSection.className = 'spirit-profile-section';
-      
-      const altTitle = document.createElement('p');
-      altTitle.className = 'spirit-profile-section-title';
-      altTitle.textContent = 'Also Known As';
-      altSection.appendChild(altTitle);
-      
-      // Show all alternate names
-      const allNames = [mainSpirit.name, ...mainSpirit.alsoKnownAs];
-      allNames.forEach(name => {
-        if (name !== displayName) { // Don't show the current name as an alternate
-          const altItem = document.createElement('p');
-          altItem.className = 'spirit-profile-item';
-          altItem.style.cursor = 'pointer';
-          altItem.style.textDecoration = 'underline';
-          altItem.style.color = 'var(--ink)';
-          altItem.textContent = name;
-          altItem.onclick = () => showSpiritProfile(name); // Pass the alias name directly
-          altSection.appendChild(altItem);
-        }
-      });
-      
-      spiritProfileBody.appendChild(altSection);
     }
 
     // Locations section
