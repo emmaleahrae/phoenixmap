@@ -699,12 +699,19 @@
     "Angelic Principality": "#7a9d6e",
     "Elemental Spirit": "#6b8e8f",
     "Fallen Angelic Spirits": "#8b7a9d",
-    "Top 7 kingdom of darkness": "#d4a574"
+    "Top 7 kingdom of darkness": "#d4a574",
+    "Top 7 kingdom of light": "#c9a86a"
   };
 
   // Top 7 spirits not yet tied to a specific location on the map
   const unassignedTop7Spirits = [
     { name: "Ouranos", type: "Demonic Principality", description: "The spirit of unwillingness (sloth / laziness)", alsoKnownAs: ["Uranus", "Nut", "Shu", "Shaddai El"], topRanking: 7 }
+  ];
+
+  // Top 7 kingdom of light beings not yet tied to a specific location on the map
+  const unassignedTop7Light = [
+    { name: "The Holy Spirit", type: "Divine Principality", description: "The spirit that lives in all who believe in the savior of Jesus Christ. The One that bestows spiritual gifts upon believers as He sees fit.", mainDescription: "The spirit that lives in all who believe in the savior of Jesus Christ. The One that bestows spiritual gifts upon believers as He sees fit.", lightRanking: 3 },
+    { name: "Raphael", type: "Angelic Principality", description: "An archangel. The embodiment of God's healing power. Helps the brethren of Christ restore, heal, and spiritually cleanse according to God's will.", mainDescription: "An archangel. The embodiment of God's healing power. Helps the brethren of Christ restore, heal, and spiritually cleanse according to God's will.", lightRanking: 6 }
   ];
 
   const cities = [
@@ -922,7 +929,7 @@
         { name: "Allah", type: "Demonic Principality", description: "The spirit of the god of Islam. Spirit of deceit. Deceiving through religion.", alsoKnownAs: ["Artemis", "Selene", "Luna", "Sin", "Khonsu"] }
       ],
       rulingSpirits: [
-        { name: "Uriel", type: "Angelic Principality", description: "Archangel of faith" }
+        { name: "Uriel", type: "Angelic Principality", description: "Archangel of faith", mainDescription: "An archangel. Embodiment of faith. Is also the main angel in charge of divine revelation and understanding.", lightRanking: 7 }
       ],
       creator: "@phoenixfromphoenixx",
       caption: "God sends Phoenix and Cody to the UK to pray against the demonic spirit of Allah",
@@ -1080,7 +1087,7 @@
         { name: "The King of Shadows", type: "Demonic Principality", description: "The spirit of greed. Ruler of the Underworld", alsoKnownAs: ["Hades", "Sheol", "Pluto", "Ereshkigal", "Hela", "Osiris"], topRanking: 6 }
       ],
       rulingSpirits: [
-        { name: "Jesus Christ", type: "Divine Principality", description: "The King of All Kings" }
+        { name: "Jesus Christ", type: "Divine Principality", description: "The King of All Kings", mainDescription: "The King above all kings. The son of God. God made flesh. The savior.", lightRanking: 2 }
       ],
       creator: "@phoenixfromphoenixx",
       caption: "Pheonix, Cody, along with their friends Ashley and Heath to pray at the Hollywood sign to remove Satan, Lucifers and Hades strong hold over the USA",
@@ -1090,7 +1097,7 @@
       date: "Ongoing",
       demonicPrincipalities: [],
       rulingSpirits: [
-        { name: "Michael", type: "Angelic Principality", description: "The archangel of God's divine power" }
+        { name: "Michael", type: "Angelic Principality", description: "The archangel of God's divine power", mainDescription: "THE archangel. Embodiment of God's divine power. The Champion of God. The head of God's army under Jesus.", lightRanking: 4 }
       ],
       creator: "@phoenixfromphoenixx",
       caption: "Archangel Michael serves as the ruling principality over all of Europe, maintaining God's divine power across the continent.",
@@ -1104,7 +1111,7 @@
         { name: "Orisha", type: "Demonic Principality", description: "Spirits that play a key role in the Yoruba religion", alsoKnownAs: [] }
       ],
       rulingSpirits: [
-        { name: "Gabriel", type: "Angelic Principality", description: "Archangel of spreading the gospel" }
+        { name: "Gabriel", type: "Angelic Principality", description: "Archangel of spreading the gospel", mainDescription: "The archangel second only to Michael. The embodiment of delivering the gospel. The bearer of good news and messenger of God.", lightRanking: 5 }
       ],
       creator: "@phoenixfromphoenixx",
       caption: "God sent Phoenix and Cody to Africa to turn the tide in His favor spiritually",
@@ -1204,7 +1211,7 @@
         { name: "Neptune", type: "Demonic Principality", description: "Demonic spirit of gluttony for land and material wealth. Head of the marine kingdom", alsoKnownAs: ["Poseidon", "Aegir", "Dagon", "Sobek", "Varuna", "Hapi"], topRanking: 5 }
       ],
       rulingSpirits: [
-        { name: "God", type: "Divine Principality", description: "God the infinite creator and sustainer of the universe who embodies perfect love, power, and holiness" }
+        { name: "God", type: "Divine Principality", description: "God the infinite creator and sustainer of the universe who embodies perfect love, power, and holiness", mainDescription: "God of The Father. The Elohim of elohim. The Creator of All. The embodiment of love.", alsoKnownAs: ["YHWH"], lightRanking: 1 }
       ],
       creator: "@phoenixfromphoenixx",
       caption: "God's divine power rules over the Atlantic Ocean",
@@ -1236,7 +1243,7 @@
   const panelCity = document.getElementById('panelCity');
   const panelSub = document.getElementById('panelSub');
   const panelBody = document.getElementById('panelBody');
-  const activeFilters = new Set(Object.keys(categoryColors).filter(name => name !== "Top 7 kingdom of darkness")); // All filters active except Top 7 by default
+  const activeFilters = new Set(Object.keys(categoryColors).filter(name => name !== "Top 7 kingdom of darkness" && name !== "Top 7 kingdom of light")); // All filters active except both Top 7 filters by default
   const DEFAULT_FILTERS = new Set(activeFilters); // Store the default filter state
   const filterButtons = {}; // Store references for updating
   
@@ -1269,7 +1276,7 @@
     item.innerHTML = `<span class="legend-dot" style="background:${color}"></span>${name}`;
     
     filterButtons[name] = item;
-    const isActive = name !== "Top 7 kingdom of darkness"; // Top 7 starts inactive
+    const isActive = name !== "Top 7 kingdom of darkness" && name !== "Top 7 kingdom of light"; // Both Top 7 filters start inactive
     updateButtonStyle(name, color, isActive);
     
     item.onmouseover = () => {
@@ -1292,6 +1299,15 @@
       if (name === "Top 7 kingdom of darkness") {
         if (activeFilters.has(name)) {
           showTop7Panel(); // Show panel when filter activated
+        } else {
+          panel.classList.remove('open'); // Close panel when filter deactivated
+        }
+      }
+
+      // If Top 7 kingdom of light filter was just toggled
+      if (name === "Top 7 kingdom of light") {
+        if (activeFilters.has(name)) {
+          showTop7LightPanel(); // Show panel when filter activated
         } else {
           panel.classList.remove('open'); // Close panel when filter deactivated
         }
@@ -1361,7 +1377,12 @@
       
       // Check if city matches active filters
       const hasMatchingSpirit = 
-        city.rulingSpirits.some(s => activeFilters.has(s.type)) ||
+        city.rulingSpirits.some(s => {
+          const matchesType = activeFilters.has(s.type);
+          const isTop7Light = s.lightRanking !== undefined;
+          const matchesTop7Light = activeFilters.has("Top 7 kingdom of light") && isTop7Light;
+          return matchesType || matchesTop7Light;
+        }) ||
         city.demonicPrincipalities.some(s => {
           const matchesType = activeFilters.has(s.type);
           const isTop7 = s.topRanking !== undefined;
@@ -1471,9 +1492,10 @@
       // Handle both single videoUrl and multiple videoUrls
       const urls = city.videoUrls || (city.videoUrl ? [city.videoUrl] : []);
       const top7PostUrl = 'https://www.instagram.com/p/DXVP3z0DyyO';
+      const top7LightPostUrl = 'https://www.instagram.com/p/DXQHNpPD9OQ';
       
-      // Filter out Top 7 post for part numbering
-      const locationUrls = urls.filter(url => url !== top7PostUrl);
+      // Filter out Top 7 explanation posts for part numbering
+      const locationUrls = urls.filter(url => url !== top7PostUrl && url !== top7LightPostUrl);
       
       urls.forEach((url, idx) => {
         const link = document.createElement('a');
@@ -1481,9 +1503,11 @@
         link.href = url;
         link.target = '_blank';
         
-        // Check if this is the Top 7 post
+        // Check if this is a Top 7 explanation post
         if (url === top7PostUrl) {
           link.textContent = 'Top 7 of Satan\'s Kingdom of Darkness Explained ↗';
+        } else if (url === top7LightPostUrl) {
+          link.textContent = 'Top 7 of God\'s Kingdom of Light Explained ↗';
         } else {
           link.textContent = locationUrls.length > 1 ? `View Part ${locationUrls.indexOf(url) + 1} Post on Instagram ↗` : 'View Post on Instagram ↗';
         }
@@ -1527,7 +1551,7 @@
       spiritName.style.userSelect = 'none';
       spiritName.style.textDecoration = 'underline';
       spiritName.style.textDecorationColor = 'var(--accent)';
-      spiritName.textContent = spirit.name + ' ▼︎';
+      spiritName.textContent = spirit.name + (spirit.lightRanking ? ` Ranked ${getOrdinal(spirit.lightRanking)} in kingdom of light` : '') + ' ▼︎';
       spiritName.id = `spirit-${spiritIdx}`;
       spiritName.title = 'Click to view spirit profile';
       spiritName.onmouseover = () => {
@@ -2031,6 +2055,166 @@
     panel.classList.add('open');
   }
 
+  function showTop7LightPanel() {
+    // Get all Top 7 kingdom of light beings ranked by lightRanking
+    const top7Spirits = [];
+    cities.forEach(city => {
+      city.rulingSpirits.forEach(spirit => {
+        if (spirit.lightRanking && !top7Spirits.find(s => s.name === spirit.name)) {
+          top7Spirits.push({
+            name: spirit.name,
+            ranking: spirit.lightRanking,
+            description: spirit.mainDescription || spirit.description,
+            aliases: spirit.alsoKnownAs || []
+          });
+        }
+      });
+    });
+    unassignedTop7Light.forEach(spirit => {
+      if (spirit.lightRanking && !top7Spirits.find(s => s.name === spirit.name)) {
+        top7Spirits.push({
+          name: spirit.name,
+          ranking: spirit.lightRanking,
+          description: spirit.mainDescription || spirit.description,
+          aliases: spirit.alsoKnownAs || []
+        });
+      }
+    });
+
+    // Sort by ranking
+    top7Spirits.sort((a, b) => a.ranking - b.ranking);
+
+    // Update side panel header
+    panelCity.textContent = 'Kingdom of light ranking';
+    panelSub.textContent = '';
+    
+    // Remove any previously added info elements
+    const existingInfo = panelSub.parentElement.querySelectorAll('p[data-info="true"]');
+    existingInfo.forEach(el => el.remove());
+
+    // Clear panel body
+    panelBody.innerHTML = '';
+    
+    // Add explanation section
+    const explanationSection = document.createElement('div');
+    explanationSection.style.marginBottom = '22px';
+    
+    const explanationTitle = document.createElement('p');
+    explanationTitle.style.fontSize = '11.5px';
+    explanationTitle.style.letterSpacing = '0.04em';
+    explanationTitle.style.textTransform = 'uppercase';
+    explanationTitle.style.fontWeight = '500';
+    explanationTitle.style.color = 'var(--ink-soft)';
+    explanationTitle.style.margin = '0 0 10px 0';
+    explanationTitle.textContent = 'About';
+    explanationSection.appendChild(explanationTitle);
+    
+    const explanationText = document.createElement('p');
+    explanationText.style.fontSize = '12px';
+    explanationText.style.color = 'var(--ink-soft)';
+    explanationText.style.margin = '0 0 14px 0';
+    explanationText.style.lineHeight = '1.5';
+    explanationText.textContent = `Phoenix: "I have had many experiences with these beings over my lifetime, some far more than others. But after many conversations with God and them, and encounters with them and countless other beings, God has repeatedly shown and confirmed in many ways, that these are the most poweful & highest ranking beings in God’s kingdom of Light. Thought you’d like to know what they look like. Now also keep in mind, the spirit realm is very abstract. This is why sometimes the exact forms of these beings can vary and change from time to time, however the core of their beings and essence stay the same. This is also why some people will see them or experience them differently at times. The spirit realm is much different than our physical with different laws governing it. All glory to God"`;
+    explanationSection.appendChild(explanationText);
+
+    const explanationLink = document.createElement('a');
+    explanationLink.className = 'video-link';
+    explanationLink.href = 'https://www.instagram.com/p/DXQHNpPD9OQ';
+    explanationLink.target = '_blank';
+    explanationLink.textContent = 'View Post on Instagram ↗';
+    explanationSection.appendChild(explanationLink);
+    
+    panelBody.appendChild(explanationSection);
+    
+    // Add Top 7 spirits list
+    const spiritsSection = document.createElement('div');
+    spiritsSection.style.marginBottom = '18px';
+    
+    const spiritsHeader = document.createElement('p');
+    spiritsHeader.style.fontSize = '11.5px';
+    spiritsHeader.style.letterSpacing = '0.04em';
+    spiritsHeader.style.textTransform = 'uppercase';
+    spiritsHeader.style.fontWeight = '500';
+    spiritsHeader.style.color = 'var(--ink-soft)';
+    spiritsHeader.style.margin = '0 0 12px 0';
+    spiritsHeader.textContent = 'Ranking in order of importance';
+    spiritsSection.appendChild(spiritsHeader);
+    
+    top7Spirits.forEach((spirit, idx) => {
+      const spiritItem = document.createElement('div');
+      spiritItem.style.marginBottom = '14px';
+      spiritItem.style.paddingBottom = '14px';
+      if (idx < top7Spirits.length - 1) {
+        spiritItem.style.borderBottom = '1px solid var(--line)';
+      }
+      
+      const rankContainer = document.createElement('div');
+      rankContainer.style.display = 'flex';
+      rankContainer.style.alignItems = 'center';
+      rankContainer.style.gap = '10px';
+      rankContainer.style.marginBottom = '6px';
+      
+      const rankBadge = document.createElement('div');
+      rankBadge.style.display = 'flex';
+      rankBadge.style.alignItems = 'center';
+      rankBadge.style.justifyContent = 'center';
+      rankBadge.style.width = '24px';
+      rankBadge.style.height = '24px';
+      rankBadge.style.backgroundColor = 'var(--accent)';
+      rankBadge.style.color = 'white';
+      rankBadge.style.borderRadius = '50%';
+      rankBadge.style.fontSize = '11px';
+      rankBadge.style.fontWeight = '700';
+      rankBadge.textContent = spirit.ranking;
+      rankContainer.appendChild(rankBadge);
+      
+      const spiritName = document.createElement('p');
+      spiritName.style.fontSize = '13.5px';
+      spiritName.style.fontWeight = '500';
+      spiritName.style.color = 'var(--accent)';
+      spiritName.style.margin = '0';
+      spiritName.style.cursor = 'pointer';
+      spiritName.style.textDecoration = 'underline';
+      spiritName.textContent = spirit.name;
+      spiritName.onmouseover = () => { spiritName.style.opacity = '0.7'; };
+      spiritName.onmouseout = () => { spiritName.style.opacity = '1'; };
+      spiritName.onclick = (e) => {
+        e.stopPropagation();
+        showSpiritProfile(spirit.name);
+      };
+      rankContainer.appendChild(spiritName);
+      
+      spiritItem.appendChild(rankContainer);
+      
+      if (spirit.description) {
+        const desc = document.createElement('p');
+        desc.style.fontSize = '11px';
+        desc.style.color = 'var(--ink-soft)';
+        desc.style.margin = '6px 0 0 34px';
+        desc.style.lineHeight = '1.4';
+        desc.textContent = spirit.description;
+        spiritItem.appendChild(desc);
+      }
+      
+      if (spirit.aliases.length > 0) {
+        const aliasLabel = document.createElement('p');
+        aliasLabel.style.fontSize = '10px';
+        aliasLabel.style.color = 'var(--ink-faint)';
+        aliasLabel.style.margin = '4px 0 0 34px';
+        aliasLabel.style.fontStyle = 'italic';
+        aliasLabel.textContent = `Also: ${spirit.aliases.join(', ')}`;
+        spiritItem.appendChild(aliasLabel);
+      }
+      
+      spiritsSection.appendChild(spiritItem);
+    });
+    
+    panelBody.appendChild(spiritsSection);
+    
+    // Open the panel
+    panel.classList.add('open');
+  }
+
   spiritModalClose.addEventListener('click', () => {
     spiritModal.classList.remove('show');
   });
@@ -2196,6 +2380,161 @@
     spiritModal.classList.add('show');
   }
 
+  function showTop7LightModal() {
+    // Get all Top 7 kingdom of light beings ranked by lightRanking
+    const top7Spirits = [];
+    cities.forEach(city => {
+      city.rulingSpirits.forEach(spirit => {
+        if (spirit.lightRanking && !top7Spirits.find(s => s.name === spirit.name)) {
+          top7Spirits.push({
+            name: spirit.name,
+            ranking: spirit.lightRanking,
+            description: spirit.mainDescription || spirit.description,
+            aliases: spirit.alsoKnownAs || []
+          });
+        }
+      });
+    });
+    unassignedTop7Light.forEach(spirit => {
+      if (spirit.lightRanking && !top7Spirits.find(s => s.name === spirit.name)) {
+        top7Spirits.push({
+          name: spirit.name,
+          ranking: spirit.lightRanking,
+          description: spirit.mainDescription || spirit.description,
+          aliases: spirit.alsoKnownAs || []
+        });
+      }
+    });
+
+    // Sort by ranking
+    top7Spirits.sort((a, b) => a.ranking - b.ranking);
+
+    // Update modal - matches showTop7LightPanel format exactly
+    spiritModalTitle.textContent = 'Kingdom of light ranking';
+    spiritModalList.innerHTML = '';
+
+    // Add explanation section
+    const explanationSection = document.createElement('div');
+    explanationSection.style.marginBottom = '22px';
+    explanationSection.style.padding = '20px 26px 0 26px';
+
+    const explanationTitle = document.createElement('p');
+    explanationTitle.style.fontSize = '11.5px';
+    explanationTitle.style.letterSpacing = '0.04em';
+    explanationTitle.style.textTransform = 'uppercase';
+    explanationTitle.style.fontWeight = '500';
+    explanationTitle.style.color = 'var(--ink-soft)';
+    explanationTitle.style.margin = '0 0 10px 0';
+    explanationTitle.textContent = 'About';
+    explanationSection.appendChild(explanationTitle);
+
+    const explanationText = document.createElement('p');
+    explanationText.style.fontSize = '12px';
+    explanationText.style.color = 'var(--ink-soft)';
+    explanationText.style.margin = '0 0 14px 0';
+    explanationText.style.lineHeight = '1.5';
+    explanationText.textContent = `Phoenix: "I have had many experiences with these beings over my lifetime, some far more than others. But after many conversations with God and them, and encounters with them and countless other beings, God has repeatedly shown and confirmed in many ways, that these are the most poweful & highest ranking beings in God’s kingdom of Light. Thought you’d like to know what they look like. Now also keep in mind, the spirit realm is very abstract. This is why sometimes the exact forms of these beings can vary and change from time to time, however the core of their beings and essence stay the same. This is also why some people will see them or experience them differently at times. The spirit realm is much different than our physical with different laws governing it. All glory to God"`;
+    explanationSection.appendChild(explanationText);
+
+    const explanationLink = document.createElement('a');
+    explanationLink.className = 'video-link';
+    explanationLink.href = 'https://www.instagram.com/p/DXQHNpPD9OQ';
+    explanationLink.target = '_blank';
+    explanationLink.textContent = 'View Post on Instagram ↗';
+    explanationSection.appendChild(explanationLink);
+
+    spiritModalList.appendChild(explanationSection);
+
+    // Add Top 7 spirits list
+    const spiritsSection = document.createElement('div');
+    spiritsSection.style.marginBottom = '18px';
+    spiritsSection.style.padding = '0 26px';
+
+    const spiritsHeader = document.createElement('p');
+    spiritsHeader.style.fontSize = '11.5px';
+    spiritsHeader.style.letterSpacing = '0.04em';
+    spiritsHeader.style.textTransform = 'uppercase';
+    spiritsHeader.style.fontWeight = '500';
+    spiritsHeader.style.color = 'var(--ink-soft)';
+    spiritsHeader.style.margin = '0 0 12px 0';
+    spiritsHeader.textContent = 'Ranking in order of importance';
+    spiritsSection.appendChild(spiritsHeader);
+
+    top7Spirits.forEach((spirit, idx) => {
+      const spiritItem = document.createElement('div');
+      spiritItem.style.marginBottom = '14px';
+      spiritItem.style.paddingBottom = '14px';
+      if (idx < top7Spirits.length - 1) {
+        spiritItem.style.borderBottom = '1px solid var(--line)';
+      }
+
+      const rankContainer = document.createElement('div');
+      rankContainer.style.display = 'flex';
+      rankContainer.style.alignItems = 'center';
+      rankContainer.style.gap = '10px';
+      rankContainer.style.marginBottom = '6px';
+
+      const rankBadge = document.createElement('div');
+      rankBadge.style.display = 'flex';
+      rankBadge.style.alignItems = 'center';
+      rankBadge.style.justifyContent = 'center';
+      rankBadge.style.width = '24px';
+      rankBadge.style.height = '24px';
+      rankBadge.style.backgroundColor = 'var(--accent)';
+      rankBadge.style.color = 'white';
+      rankBadge.style.borderRadius = '50%';
+      rankBadge.style.fontSize = '11px';
+      rankBadge.style.fontWeight = '700';
+      rankBadge.textContent = spirit.ranking;
+      rankContainer.appendChild(rankBadge);
+
+      const spiritName = document.createElement('p');
+      spiritName.style.fontSize = '13.5px';
+      spiritName.style.fontWeight = '500';
+      spiritName.style.color = 'var(--accent)';
+      spiritName.style.margin = '0';
+      spiritName.style.cursor = 'pointer';
+      spiritName.style.textDecoration = 'underline';
+      spiritName.textContent = spirit.name;
+      spiritName.onmouseover = () => { spiritName.style.opacity = '0.7'; };
+      spiritName.onmouseout = () => { spiritName.style.opacity = '1'; };
+      spiritName.onclick = (e) => {
+        e.stopPropagation();
+        spiritModal.classList.remove('show');
+        showSpiritProfile(spirit.name);
+      };
+      rankContainer.appendChild(spiritName);
+
+      spiritItem.appendChild(rankContainer);
+
+      if (spirit.description) {
+        const desc = document.createElement('p');
+        desc.style.fontSize = '11px';
+        desc.style.color = 'var(--ink-soft)';
+        desc.style.margin = '6px 0 0 34px';
+        desc.style.lineHeight = '1.4';
+        desc.textContent = spirit.description;
+        spiritItem.appendChild(desc);
+      }
+
+      if (spirit.aliases.length > 0) {
+        const aliasLabel = document.createElement('p');
+        aliasLabel.style.fontSize = '10px';
+        aliasLabel.style.color = 'var(--ink-faint)';
+        aliasLabel.style.margin = '4px 0 0 34px';
+        aliasLabel.style.fontStyle = 'italic';
+        aliasLabel.textContent = `Also: ${spirit.aliases.join(', ')}`;
+        spiritItem.appendChild(aliasLabel);
+      }
+
+      spiritsSection.appendChild(spiritItem);
+    });
+
+    spiritModalList.appendChild(spiritsSection);
+
+    spiritModal.classList.add('show');
+  }
+
   // =================================================================
   // SPIRIT PROFILE PANEL
   // =================================================================
@@ -2231,6 +2570,7 @@
       city.demonicPrincipalities.forEach(s => allSpiritEntries.push(s));
     });
     unassignedTop7Spirits.forEach(s => allSpiritEntries.push(s));
+    unassignedTop7Light.forEach(s => allSpiritEntries.push(s));
 
     allSpiritEntries.forEach(spirit => {
       find(spirit.name);
@@ -2267,7 +2607,7 @@
       // Check ruling spirits
       for (let spirit of city.rulingSpirits) {
         if (identityGroup.has(spirit.name)) {
-          if (spirit.topRanking || !mainSpirit) {
+          if (spirit.topRanking || spirit.lightRanking || !mainSpirit) {
             mainSpirit = spirit;
             spiritType = 'ruling';
           }
@@ -2283,7 +2623,7 @@
       // Check demonic spirits
       for (let spirit of city.demonicPrincipalities) {
         if (identityGroup.has(spirit.name)) {
-          if (spirit.topRanking || !mainSpirit) {
+          if (spirit.topRanking || spirit.lightRanking || !mainSpirit) {
             mainSpirit = spirit;
             spiritType = 'demonic';
           }
@@ -2306,6 +2646,16 @@
         if (spirit.topRanking || !mainSpirit) {
           mainSpirit = spirit;
           spiritType = 'demonic';
+        }
+      }
+    }
+
+    // Check Top 7 kingdom of light beings not yet tied to a location
+    for (let spirit of unassignedTop7Light) {
+      if (identityGroup.has(spirit.name)) {
+        if (spirit.lightRanking || !mainSpirit) {
+          mainSpirit = spirit;
+          spiritType = 'ruling';
         }
       }
     }
@@ -2340,6 +2690,27 @@
       rankingTag.onclick = (e) => {
         e.stopPropagation();
         showTop7Modal();
+      };
+      rankingTag.onmouseover = () => {
+        rankingTag.style.opacity = '0.7';
+      };
+      rankingTag.onmouseout = () => {
+        rankingTag.style.opacity = '1';
+      };
+      headerContent.appendChild(rankingTag);
+    } else if (mainSpirit.lightRanking) {
+      const rankingTag = document.createElement('p');
+      rankingTag.className = 'spirit-profile-ranking';
+      rankingTag.style.fontSize = '12px';
+      rankingTag.style.color = 'var(--accent)';
+      rankingTag.style.margin = '4px 0 0 0';
+      rankingTag.style.fontWeight = '600';
+      rankingTag.style.cursor = 'pointer';
+      rankingTag.style.textDecoration = 'underline';
+      rankingTag.textContent = `Ranked ${getOrdinal(mainSpirit.lightRanking)} in kingdom of light`;
+      rankingTag.onclick = (e) => {
+        e.stopPropagation();
+        showTop7LightModal();
       };
       rankingTag.onmouseover = () => {
         rankingTag.style.opacity = '0.7';
@@ -2543,6 +2914,7 @@
     // Instagram Posts section
     const instagramPosts = [];
     const top7PostUrl = 'https://www.instagram.com/p/DXVP3z0DyyO';
+    const top7LightPostUrl = 'https://www.instagram.com/p/DXQHNpPD9OQ';
     
     for (let city of cities) {
       // Check if spirit appears in this city (ruling or demonic) - match by identity network
@@ -2564,11 +2936,11 @@
         }
       }
       
-      // If spirit is in this city, collect its Instagram links with location tracking (exclude Top 7 post)
+      // If spirit is in this city, collect its Instagram links with location tracking (exclude Top 7 explanation posts)
       if (hasSpirit) {
         if (city.videoUrls && Array.isArray(city.videoUrls)) {
           city.videoUrls.forEach((url, urlIdx) => {
-            if (url !== '#' && url !== top7PostUrl) {
+            if (url !== '#' && url !== top7PostUrl && url !== top7LightPostUrl) {
               instagramPosts.push({ url, city: city.name, country: city.country, urlIndex: urlIdx, totalUrlsForCity: city.videoUrls.length });
             }
           });
@@ -2583,6 +2955,18 @@
       instagramPosts.push({ 
         url: 'https://www.instagram.com/p/DXVP3z0DyyO', 
         city: 'Kingdom of Darkness', 
+        country: 'Explanation', 
+        isTop7: true,
+        urlIndex: 0, 
+        totalUrlsForCity: 1 
+      });
+    }
+
+    // Add Top 7 explanation post if this spirit is in the Kingdom of Light
+    if (mainSpirit.lightRanking) {
+      instagramPosts.push({ 
+        url: 'https://www.instagram.com/p/DXQHNpPD9OQ', 
+        city: 'Kingdom of Light', 
         country: 'Explanation', 
         isTop7: true,
         urlIndex: 0, 
