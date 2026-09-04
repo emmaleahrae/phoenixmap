@@ -1296,10 +1296,7 @@
   // Define zoom levels and location types
   function getLocationZoomLevel(city) {
     if (city.country === 'Continental') return 0; // Always show continental
-    if (city.name.includes('Temple') || city.name.includes('River') || city.name.includes('Eiffel') || city.name.includes('Louvre')) {
-      console.log(`${city.name} is a monument, zoom required: 5`);
-      return 5; // Specific monuments
-    }
+    if (city.name.includes('Temple') || city.name.includes('River') || city.name.includes('Eiffel') || city.name.includes('Louvre')) return 5; // Specific monuments
     if (city.country.length > 15) return 2; // Countries (typically longer names)
     return 3; // Cities
   }
@@ -1809,7 +1806,6 @@
   }
 
   function showTop7Panel() {
-    console.log('showTop7Panel called');
     // Get all Top 7 spirits ranked by topRanking
     const top7Spirits = [];
     cities.forEach(city => {
@@ -1949,9 +1945,7 @@
     panelBody.appendChild(spiritsSection);
     
     // Open the panel
-    console.log('Opening panel, top7Spirits count:', top7Spirits.length);
     panel.classList.add('open');
-    console.log('Panel open class added');
   }
 
   spiritModalClose.addEventListener('click', () => {
