@@ -1542,17 +1542,15 @@
         expandedSpirit.appendChild(spiritDesc);
       }
       
-      // Primary names blurb
-      if (spirit.alsoKnownAs && spirit.alsoKnownAs.length > 0) {
-        const primaryBlurb = document.createElement('p');
-        primaryBlurb.style.fontSize = '11px';
-        primaryBlurb.style.color = '#999';
-        primaryBlurb.style.margin = '0 0 8px 0';
-        primaryBlurb.style.lineHeight = '1.4';
-        primaryBlurb.style.fontStyle = 'italic';
-        primaryBlurb.textContent = `This spirit is known by many names across different cultures and religions, but is fundamentally the same demonic or angelic force.`;
-        expandedSpirit.appendChild(primaryBlurb);
-      }
+      // Primary names blurb - always show
+      const primaryBlurb = document.createElement('p');
+      primaryBlurb.style.fontSize = '11px';
+      primaryBlurb.style.color = '#999';
+      primaryBlurb.style.margin = '0 0 8px 0';
+      primaryBlurb.style.lineHeight = '1.4';
+      primaryBlurb.style.fontStyle = 'italic';
+      primaryBlurb.textContent = `This spirit is known by many names across different cultures and religions, but is fundamentally the same demonic or angelic force.`;
+      expandedSpirit.appendChild(primaryBlurb);
       
       // Type tag - always visible, outside collapsible section
       const typeTag = document.createElement('p');
@@ -1645,17 +1643,15 @@
         expandedContent.appendChild(demoDesc);
       }
       
-      // Primary names blurb
-      if (demo.alsoKnownAs && demo.alsoKnownAs.length > 0) {
-        const primaryBlurb = document.createElement('p');
-        primaryBlurb.style.fontSize = '11px';
-        primaryBlurb.style.color = '#999';
-        primaryBlurb.style.margin = '0 0 8px 0';
-        primaryBlurb.style.lineHeight = '1.4';
-        primaryBlurb.style.fontStyle = 'italic';
-        primaryBlurb.textContent = `This spirit is known by many names across different cultures and religions, but is fundamentally the same demonic or angelic force.`;
-        expandedContent.appendChild(primaryBlurb);
-      }
+      // Primary names blurb - always show
+      const primaryBlurb = document.createElement('p');
+      primaryBlurb.style.fontSize = '11px';
+      primaryBlurb.style.color = '#999';
+      primaryBlurb.style.margin = '0 0 8px 0';
+      primaryBlurb.style.lineHeight = '1.4';
+      primaryBlurb.style.fontStyle = 'italic';
+      primaryBlurb.textContent = `This spirit is known by many names across different cultures and religions, but is fundamentally the same demonic or angelic force.`;
+      expandedContent.appendChild(primaryBlurb);
       
       if (demo.alsoKnownAs && demo.alsoKnownAs.length > 0) {
         const alsoKnownContainer = document.createElement('p');
