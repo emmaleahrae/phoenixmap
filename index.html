@@ -1554,22 +1554,24 @@
         expandedSpirit.appendChild(spiritDesc);
       }
       
-      // Primary names blurb - always show
-      const primaryBlurb = document.createElement('p');
-      primaryBlurb.style.fontSize = '12px';
-      primaryBlurb.style.color = 'var(--ink-soft)';
-      primaryBlurb.style.margin = '0 0 12px 0';
-      primaryBlurb.style.lineHeight = '1.5';
-      primaryBlurb.style.fontStyle = 'normal';
-      primaryBlurb.style.paddingBottom = '12px';
-      primaryBlurb.style.borderBottom = '1px solid #f0ede7';
-      primaryBlurb.textContent = `This spirit is known by many names across different cultures and religions, but is fundamentally the same demonic or angelic force.`;
-      expandedSpirit.appendChild(primaryBlurb);
+      // Primary names blurb - only show if spirit has aliases
+      if (spirit.alsoKnownAs && spirit.alsoKnownAs.length > 0) {
+        const primaryBlurb = document.createElement('p');
+        primaryBlurb.style.fontSize = '12px';
+        primaryBlurb.style.color = 'var(--ink-soft)';
+        primaryBlurb.style.margin = '0 0 12px 0';
+        primaryBlurb.style.lineHeight = '1.5';
+        primaryBlurb.style.fontStyle = 'normal';
+        primaryBlurb.style.paddingBottom = '12px';
+        primaryBlurb.style.borderBottom = '1px solid #f0ede7';
+        primaryBlurb.textContent = `This spirit is known by many names across different cultures and religions, but is fundamentally the same demonic or angelic force.`;
+        expandedSpirit.appendChild(primaryBlurb);
+      }
       
       // Also Known As section
       if (spirit.alsoKnownAs && spirit.alsoKnownAs.length > 0) {
         const altSection = document.createElement('div');
-        altSection.style.marginTop = '12px';
+        altSection.style.marginTop = spirit.alsoKnownAs ? '0px' : '12px';
         
         const altTitle = document.createElement('p');
         altTitle.style.fontSize = '11.5px';
