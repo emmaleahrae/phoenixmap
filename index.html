@@ -1494,23 +1494,17 @@
       const top7PostUrl = 'https://www.instagram.com/p/DXVP3z0DyyO';
       const top7LightPostUrl = 'https://www.instagram.com/p/DXQHNpPD9OQ';
       
-      // Filter out Top 7 explanation posts for part numbering
+      // Exclude Top 7 explanation posts here - they render attached to their
+      // own relevant section below (demonic section for darkness, ruling
+      // section for light) instead of in this generic shared Source block
       const locationUrls = urls.filter(url => url !== top7PostUrl && url !== top7LightPostUrl);
       
-      urls.forEach((url, idx) => {
+      locationUrls.forEach((url, idx) => {
         const link = document.createElement('a');
         link.className = 'video-link';
         link.href = url;
         link.target = '_blank';
-        
-        // Check if this is a Top 7 explanation post
-        if (url === top7PostUrl) {
-          link.textContent = 'Top 7 of Satan\'s Kingdom of darkness Explained ↗';
-        } else if (url === top7LightPostUrl) {
-          link.textContent = 'Top 7 of God\'s Kingdom of Light Explained ↗';
-        } else {
-          link.textContent = locationUrls.length > 1 ? `View Part ${locationUrls.indexOf(url) + 1} Post on Instagram ↗` : 'View Post on Instagram ↗';
-        }
+        link.textContent = locationUrls.length > 1 ? `View Part ${idx + 1} Post on Instagram ↗` : 'View Post on Instagram ↗';
         cardFooter.appendChild(link);
       });
       
@@ -1661,6 +1655,21 @@
     }
     
     panelBody.appendChild(spiritsSection);
+
+    // Kingdom of Light explanation link - only shown if this location
+    // actually has a ruling spirit that is one of the Top 7 kingdom of Light
+    if (city.rulingSpirits.some(s => s.lightRanking !== undefined)) {
+      const lightLinkWrap = document.createElement('div');
+      lightLinkWrap.style.marginTop = '-8px';
+      lightLinkWrap.style.marginBottom = '18px';
+      const lightLink = document.createElement('a');
+      lightLink.className = 'video-link';
+      lightLink.href = 'https://www.instagram.com/p/DXQHNpPD9OQ';
+      lightLink.target = '_blank';
+      lightLink.textContent = 'Top 7 of God\'s Kingdom of Light Explained ↗';
+      lightLinkWrap.appendChild(lightLink);
+      panelBody.appendChild(lightLinkWrap);
+    }
     
     // Demonic Principalities Section
     const demoSection = document.createElement('div');
@@ -1793,6 +1802,21 @@
     });
     
     panelBody.appendChild(demoSection);
+
+    // Kingdom of darkness explanation link - only shown if this location
+    // actually has a demonic principality that is one of the Top 7 kingdom of darkness
+    if (city.demonicPrincipalities.some(d => d.topRanking !== undefined)) {
+      const darkLinkWrap = document.createElement('div');
+      darkLinkWrap.style.marginTop = '-8px';
+      darkLinkWrap.style.marginBottom = '18px';
+      const darkLink = document.createElement('a');
+      darkLink.className = 'video-link';
+      darkLink.href = 'https://www.instagram.com/p/DXVP3z0DyyO';
+      darkLink.target = '_blank';
+      darkLink.textContent = 'Top 7 of Satan\'s Kingdom of darkness Explained ↗';
+      darkLinkWrap.appendChild(darkLink);
+      panelBody.appendChild(darkLinkWrap);
+    }
 
     panel.classList.add('open');
     
