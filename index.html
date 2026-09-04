@@ -2291,7 +2291,16 @@
           altItem.style.textDecoration = 'underline';
           altItem.style.color = 'var(--ink)';
           altItem.textContent = name;
-          altItem.onclick = () => showSpiritProfile(name);
+          altItem.onclick = () => {
+            // Find spirit by name OR by alias
+            const foundSpirit = cities
+              .flatMap(c => [...c.rulingSpirits, ...c.demonicPrincipalities])
+              .find(s => s.name === name || (s.alsoKnownAs && s.alsoKnownAs.includes(name)));
+            
+            if (foundSpirit) {
+              showSpiritProfile(foundSpirit.name);
+            }
+          };
           altSection.appendChild(altItem);
         }
       });
