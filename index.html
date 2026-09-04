@@ -2360,6 +2360,8 @@
 
     // Instagram Posts section
     const instagramPosts = [];
+    const top7PostUrl = 'https://www.instagram.com/p/DXVP3z0DyyO';
+    
     for (let city of cities) {
       // Check if spirit appears in this city (ruling or demonic)
       let hasSpirit = false;
@@ -2380,11 +2382,11 @@
         }
       }
       
-      // If spirit is in this city, collect its Instagram links with location tracking
+      // If spirit is in this city, collect its Instagram links with location tracking (exclude Top 7 post)
       if (hasSpirit) {
         if (city.videoUrls && Array.isArray(city.videoUrls)) {
           city.videoUrls.forEach((url, urlIdx) => {
-            if (url !== '#') {
+            if (url !== '#' && url !== top7PostUrl) {
               instagramPosts.push({ url, city: city.name, country: city.country, urlIndex: urlIdx, totalUrlsForCity: city.videoUrls.length });
             }
           });
