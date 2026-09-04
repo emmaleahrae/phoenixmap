@@ -699,7 +699,7 @@
     "Angelic Principality": "#7a9d6e",
     "Elemental Spirit": "#6b8e8f",
     "Fallen Angelic Spirits": "#8b7a9d",
-    "Top 7 Kingdom of Darkness": "#d4a574"
+    "Top 7 kingdom of darkness": "#d4a574"
   };
 
   // Top 7 spirits not yet tied to a specific location on the map
@@ -1236,7 +1236,7 @@
   const panelCity = document.getElementById('panelCity');
   const panelSub = document.getElementById('panelSub');
   const panelBody = document.getElementById('panelBody');
-  const activeFilters = new Set(Object.keys(categoryColors).filter(name => name !== "Top 7 Kingdom of Darkness")); // All filters active except Top 7 by default
+  const activeFilters = new Set(Object.keys(categoryColors).filter(name => name !== "Top 7 kingdom of darkness")); // All filters active except Top 7 by default
   const DEFAULT_FILTERS = new Set(activeFilters); // Store the default filter state
   const filterButtons = {}; // Store references for updating
   
@@ -1269,7 +1269,7 @@
     item.innerHTML = `<span class="legend-dot" style="background:${color}"></span>${name}`;
     
     filterButtons[name] = item;
-    const isActive = name !== "Top 7 Kingdom of Darkness"; // Top 7 starts inactive
+    const isActive = name !== "Top 7 kingdom of darkness"; // Top 7 starts inactive
     updateButtonStyle(name, color, isActive);
     
     item.onmouseover = () => {
@@ -1288,8 +1288,8 @@
       updateButtonStyle(name, color, activeFilters.has(name));
       updateMarkerVisibility();
       
-      // If Top 7 Kingdom of Darkness filter was just toggled
-      if (name === "Top 7 Kingdom of Darkness") {
+      // If Top 7 kingdom of darkness filter was just toggled
+      if (name === "Top 7 kingdom of darkness") {
         if (activeFilters.has(name)) {
           showTop7Panel(); // Show panel when filter activated
         } else {
@@ -1365,7 +1365,7 @@
         city.demonicPrincipalities.some(s => {
           const matchesType = activeFilters.has(s.type);
           const isTop7 = s.topRanking !== undefined;
-          const matchesTop7 = activeFilters.has("Top 7 Kingdom of Darkness") && isTop7;
+          const matchesTop7 = activeFilters.has("Top 7 kingdom of darkness") && isTop7;
           return matchesType || matchesTop7;
         });
       
