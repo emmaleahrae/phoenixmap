@@ -2378,7 +2378,28 @@
       descriptionsByLocation.forEach((desc, idx) => {
         const descP = document.createElement('p');
         descP.className = 'spirit-profile-description';
-        descP.innerHTML = `<strong>${desc.city}, ${desc.country} (as ${desc.localName}):</strong><br>${desc.description}`;
+
+        const locationPrefix = document.createElement('strong');
+        locationPrefix.textContent = `${desc.city}, ${desc.country} (as `;
+        descP.appendChild(locationPrefix);
+
+        const nameTag = document.createElement('strong');
+        nameTag.textContent = desc.localName;
+        nameTag.style.cursor = 'pointer';
+        nameTag.style.textDecoration = 'underline';
+        nameTag.onclick = (e) => {
+          e.stopPropagation();
+          showSpiritProfile(desc.localName);
+        };
+        descP.appendChild(nameTag);
+
+        const locationSuffix = document.createElement('strong');
+        locationSuffix.textContent = '):';
+        descP.appendChild(locationSuffix);
+
+        descP.appendChild(document.createElement('br'));
+        descP.appendChild(document.createTextNode(desc.description));
+
         descSection.appendChild(descP);
         
         // Add spacing between multiple descriptions
