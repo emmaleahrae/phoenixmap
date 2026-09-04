@@ -1538,7 +1538,7 @@
         spiritDesc.style.color = 'var(--ink-soft)';
         spiritDesc.style.margin = '0 0 8px 0';
         spiritDesc.style.lineHeight = '1.4';
-        spiritDesc.textContent = spirit.description;
+        spiritDesc.textContent = spirit.mainDescription || spirit.description;
         expandedSpirit.appendChild(spiritDesc);
       }
       
