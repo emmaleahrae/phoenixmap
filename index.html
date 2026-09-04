@@ -1338,29 +1338,35 @@
     locationZoomLevels[city.name] = getLocationZoomLevel(city);
   });
 
-  // Update marker visibility based on zoom level
+  // Update marker visibility based on zoom level AND active filters
   function updateMarkersByZoom() {
     const currentZoom = map.getZoom();
     Object.entries(markersByCity).forEach(([cityName, { marker, city }]) => {
-      const requiredZoom = locationZoomLevels[cityName];
-      const shouldShow = currentZoom >= requiredZoom;
+      // Check if city matches active filters
+      const hasMatchingSpirit = 
+        city.rulingSpirits.some(s => activeFilters.has(s.type)) ||
+        city.demonicPrincipalities.some(s => {
+          const matchesType = activeFilters.has(s.type);
+          const isTop7 = s.topRanking !== undefined;
+          const matchesTop7 = activeFilters.has("Top 7 Kingdom of Darkness") && isTop7;
+          return matchesType || matchesTop7;
+        });
       
-      if (shouldShow && activeFilters.size > 0) {
-        // Check if city matches active filters
-        const hasMatchingSpirit = 
-          city.rulingSpirits.some(s => activeFilters.has(s.type)) ||
-          city.demonicPrincipalities.some(s => {
-            const matchesType = activeFilters.has(s.type);
-            const isTop7 = s.topRanking !== undefined;
-            const matchesTop7 = activeFilters.has("Top 7 Kingdom of Darkness") && isTop7;
-            return matchesType || matchesTop7;
-          });
-        
-        if (hasMatchingSpirit) {
-          markerGroup.addLayer(marker);
-        } else {
-          markerGroup.removeLayer(marker);
-        }
+      if (!hasMatchingSpirit) {
+        // If no matching spirits, always hide
+        markerGroup.removeLayer(marker);
+        return;
+      }
+      
+      // If has matching spirits, check zoom ONLY if all filters are at default (not actively filtered)
+      const requiredZoom = locationZoomLevels[cityName];
+      const shouldShowByZoom = currentZoom >= requiredZoom;
+      
+      // If user actively clicked a filter, override zoom. Otherwise respect zoom level.
+      const userHasFiltered = activeFilters.size < Object.keys(categoryColors).length - 1; // Less than default count (excluding Top 7)
+      
+      if (userHasFiltered || shouldShowByZoom) {
+        markerGroup.addLayer(marker);
       } else {
         markerGroup.removeLayer(marker);
       }
