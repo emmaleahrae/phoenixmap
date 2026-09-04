@@ -1531,18 +1531,10 @@
       expandedSpirit.style.paddingTop = '8px';
       expandedSpirit.style.borderTop = '1px solid #eee';
       
-      // Toggle collapse/expand functionality
+      // Click to open spirit profile
       spiritName.onclick = (e) => {
         e.stopPropagation();
-        const isOpen = expandedSpirit.style.display !== 'none';
-        if (isOpen) {
-          expandedSpirit.style.display = 'none';
-          spiritName.textContent = spirit.name + ' ▶';
-        } else {
-          expandedSpirit.style.display = 'block';
-          spiritName.textContent = spirit.name + ' ▼';
-          showSpiritProfile(spirit.name);
-        }
+        showSpiritProfile(spirit.name);
       };
       
       if (spirit.description) {
@@ -1734,15 +1726,7 @@
       // Toggle collapse/expand functionality
       demoName.onclick = (e) => {
         e.stopPropagation();
-        const isOpen = expandedContent.style.display !== 'none';
-        if (isOpen) {
-          expandedContent.style.display = 'none';
-          demoName.textContent = demo.name + ' ▶';
-        } else {
-          expandedContent.style.display = 'block';
-          demoName.textContent = demo.name + ' ▼';
-          showSpiritProfile(demo.name);
-        }
+        showSpiritProfile(demo.name);
       };
       
       // Type tag - always visible, outside collapsible section
