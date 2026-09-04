@@ -2387,6 +2387,7 @@
         nameTag.textContent = desc.localName;
         nameTag.style.cursor = 'pointer';
         nameTag.style.textDecoration = 'underline';
+        nameTag.style.color = 'var(--accent)';
         nameTag.onclick = (e) => {
           e.stopPropagation();
           showSpiritProfile(desc.localName);
