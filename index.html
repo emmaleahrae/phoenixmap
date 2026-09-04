@@ -1223,6 +1223,7 @@
   const panelSub = document.getElementById('panelSub');
   const panelBody = document.getElementById('panelBody');
   const activeFilters = new Set(Object.keys(categoryColors).filter(name => name !== "Top 7 Kingdom of Darkness")); // All filters active except Top 7 by default
+  const DEFAULT_FILTERS = new Set(activeFilters); // Store the default filter state
   const filterButtons = {}; // Store references for updating
   
   function updateMarkerVisibility() {
@@ -1341,26 +1342,28 @@
   // Update marker visibility based on zoom level
   function updateMarkersByZoom() {
     const currentZoom = map.getZoom();
+    const userHasFiltered = activeFilters.size !== DEFAULT_FILTERS.size; // User removed at least one filter
+    
     Object.entries(markersByCity).forEach(([cityName, { marker, city }]) => {
       const requiredZoom = locationZoomLevels[cityName];
-      const shouldShow = currentZoom >= requiredZoom;
+      const shouldShowByZoom = currentZoom >= requiredZoom;
+      
+      // Check if city matches active filters
+      const hasMatchingSpirit = 
+        city.rulingSpirits.some(s => activeFilters.has(s.type)) ||
+        city.demonicPrincipalities.some(s => {
+          const matchesType = activeFilters.has(s.type);
+          const isTop7 = s.topRanking !== undefined;
+          const matchesTop7 = activeFilters.has("Top 7 Kingdom of Darkness") && isTop7;
+          return matchesType || matchesTop7;
+        });
+      
+      // If user actively filtered, show all matching spirits regardless of zoom
+      // Otherwise, respect zoom level
+      const shouldShow = hasMatchingSpirit && (userHasFiltered || shouldShowByZoom);
       
       if (shouldShow && activeFilters.size > 0) {
-        // Check if city matches active filters
-        const hasMatchingSpirit = 
-          city.rulingSpirits.some(s => activeFilters.has(s.type)) ||
-          city.demonicPrincipalities.some(s => {
-            const matchesType = activeFilters.has(s.type);
-            const isTop7 = s.topRanking !== undefined;
-            const matchesTop7 = activeFilters.has("Top 7 Kingdom of Darkness") && isTop7;
-            return matchesType || matchesTop7;
-          });
-        
-        if (hasMatchingSpirit) {
-          markerGroup.addLayer(marker);
-        } else {
-          markerGroup.removeLayer(marker);
-        }
+        markerGroup.addLayer(marker);
       } else {
         markerGroup.removeLayer(marker);
       }
