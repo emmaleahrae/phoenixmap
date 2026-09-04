@@ -2165,6 +2165,52 @@
   const spiritProfileHeader = document.getElementById('spiritProfileHeader');
   const spiritProfileBody = document.getElementById('spiritProfileBody');
 
+  // Build the full identity network across every spirit entry on the map.
+  // This resolves names transitively - e.g. if Horus's entry lists Satan as
+  // an alias, they're linked even if Satan's own entry doesn't list Horus
+  // back. This ensures every card in a spirit's cultural network reliably
+  // pulls in the same full set of locations, regardless of how any one
+  // individual entry's alsoKnownAs list happens to be written.
+  function getIdentityGroup(seedName) {
+    const parent = {};
+    const find = (x) => {
+      if (!(x in parent)) parent[x] = x;
+      while (parent[x] !== x) {
+        parent[x] = parent[parent[x]];
+        x = parent[x];
+      }
+      return x;
+    };
+    const union = (a, b) => {
+      const ra = find(a), rb = find(b);
+      if (ra !== rb) parent[ra] = rb;
+    };
+
+    const allSpiritEntries = [];
+    cities.forEach(city => {
+      city.rulingSpirits.forEach(s => allSpiritEntries.push(s));
+      city.demonicPrincipalities.forEach(s => allSpiritEntries.push(s));
+    });
+    unassignedTop7Spirits.forEach(s => allSpiritEntries.push(s));
+
+    allSpiritEntries.forEach(spirit => {
+      find(spirit.name);
+      (spirit.alsoKnownAs || []).forEach(alias => {
+        find(alias);
+        union(spirit.name, alias);
+      });
+    });
+
+    const group = new Set([seedName]);
+    if (seedName in parent) {
+      const root = find(seedName);
+      Object.keys(parent).forEach(name => {
+        if (find(name) === root) group.add(name);
+      });
+    }
+    return group;
+  }
+
   function showSpiritProfile(spiritName) {
     // Find the main spirit (handle alternate names)
     let displayName = spiritName; // Show the clicked name as title
@@ -2172,12 +2218,16 @@
     let spiritType = null;
     let foundLocations = [];
 
-    // Search for the spirit in all cities - match by name OR by alias
+    // Resolve the full identity network for the clicked name (transitive,
+    // so it works even if some entries' alsoKnownAs lists aren't symmetric)
+    const identityGroup = getIdentityGroup(spiritName);
+
+    // Search for the spirit in all cities - match by full identity network
     // PRIORITIZE finding entries with topRanking first
     for (let city of cities) {
       // Check ruling spirits
       for (let spirit of city.rulingSpirits) {
-        if (spirit.name === spiritName || (spirit.alsoKnownAs && spirit.alsoKnownAs.includes(spiritName))) {
+        if (identityGroup.has(spirit.name)) {
           if (spirit.topRanking || !mainSpirit) {
             mainSpirit = spirit;
             spiritType = 'ruling';
@@ -2186,14 +2236,14 @@
             name: city.name, 
             country: city.country, 
             date: city.date,
-            type: spiritType 
+            type: 'ruling' 
           });
         }
       }
 
       // Check demonic spirits
       for (let spirit of city.demonicPrincipalities) {
-        if (spirit.name === spiritName || (spirit.alsoKnownAs && spirit.alsoKnownAs.includes(spiritName))) {
+        if (identityGroup.has(spirit.name)) {
           if (spirit.topRanking || !mainSpirit) {
             mainSpirit = spirit;
             spiritType = 'demonic';
@@ -2202,7 +2252,7 @@
             name: city.name, 
             country: city.country, 
             date: city.date,
-            type: spiritType 
+            type: 'demonic' 
           });
         }
       }
@@ -2211,7 +2261,7 @@
     // Check spirits not yet tied to a location (e.g. Top 7 spirits pending location data)
     if (!mainSpirit) {
       for (let spirit of unassignedTop7Spirits) {
-        if (spirit.name === spiritName || (spirit.alsoKnownAs && spirit.alsoKnownAs.includes(spiritName))) {
+        if (identityGroup.has(spirit.name)) {
           mainSpirit = spirit;
           spiritType = 'demonic';
         }
@@ -2287,20 +2337,13 @@
     spiritProfileBody.appendChild(manifestHeader);
 
     // Description section - show this spirit's descriptions by location,
-    // matching by identity (name or any alias) so cultural names like
-    // Ra/Apollo all resolve to the same underlying spirit as Lucifer
-    const isSameSpirit = (spirit) => {
-      if (spirit.name === mainSpirit.name) return true;
-      if (spirit.alsoKnownAs && spirit.alsoKnownAs.includes(mainSpirit.name)) return true;
-      if (mainSpirit.alsoKnownAs && mainSpirit.alsoKnownAs.includes(spirit.name)) return true;
-      return false;
-    };
-
+    // matching against the full transitive identity network so cultural
+    // names like Ra/Apollo all resolve to the same underlying spirit
     const descriptionsByLocation = [];
     for (let city of cities) {
-      // Check ruling spirits - match by identity (name or alias)
+      // Check ruling spirits - match by identity network
       for (let spirit of city.rulingSpirits) {
-        if (isSameSpirit(spirit)) {
+        if (identityGroup.has(spirit.name)) {
           descriptionsByLocation.push({
             description: spirit.description,
             city: city.name,
@@ -2309,9 +2352,9 @@
         }
       }
 
-      // Check demonic spirits - match by identity (name or alias)
+      // Check demonic spirits - match by identity network
       for (let spirit of city.demonicPrincipalities) {
-        if (isSameSpirit(spirit)) {
+        if (identityGroup.has(spirit.name)) {
           descriptionsByLocation.push({
             description: spirit.description,
             city: city.name,
@@ -2433,11 +2476,11 @@
     const top7PostUrl = 'https://www.instagram.com/p/DXVP3z0DyyO';
     
     for (let city of cities) {
-      // Check if spirit appears in this city (ruling or demonic)
+      // Check if spirit appears in this city (ruling or demonic) - match by identity network
       let hasSpirit = false;
       
       for (let spirit of city.rulingSpirits) {
-        if (spirit.name === displayName || (spirit.alsoKnownAs && spirit.alsoKnownAs.includes(displayName))) {
+        if (identityGroup.has(spirit.name)) {
           hasSpirit = true;
           break;
         }
@@ -2445,7 +2488,7 @@
       
       if (!hasSpirit) {
         for (let spirit of city.demonicPrincipalities) {
-          if (spirit.name === displayName || (spirit.alsoKnownAs && spirit.alsoKnownAs.includes(displayName))) {
+          if (identityGroup.has(spirit.name)) {
             hasSpirit = true;
             break;
           }
