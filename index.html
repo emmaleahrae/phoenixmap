@@ -1562,7 +1562,9 @@
         primaryBlurb.style.fontStyle = 'normal';
         primaryBlurb.style.paddingBottom = '12px';
         primaryBlurb.style.borderBottom = '1px solid #f0ede7';
-        primaryBlurb.textContent = `This spirit is known by many names across different cultures and religions, but is fundamentally the same demonic or angelic force.`;
+        primaryBlurb.textContent = spirit.type === 'Demonic Principality'
+          ? `This spirit is known by many names across different cultures and religions, but is fundamentally the same demonic principality.`
+          : `This spirit is known by many names across different cultures and religions, but is fundamentally the same demonic or angelic force.`;
         expandedSpirit.appendChild(primaryBlurb);
       }
       
@@ -1692,7 +1694,9 @@
         primaryBlurb.style.margin = '0 0 8px 0';
         primaryBlurb.style.lineHeight = '1.4';
         primaryBlurb.style.fontStyle = 'italic';
-        primaryBlurb.textContent = `This spirit is known by many names across different cultures and religions, but is fundamentally the same demonic or angelic force.`;
+        primaryBlurb.textContent = demo.type === 'Demonic Principality'
+          ? `This spirit is known by many names across different cultures and religions, but is fundamentally the same demonic principality.`
+          : `This spirit is known by many names across different cultures and religions, but is fundamentally the same demonic or angelic force.`;
         expandedContent.appendChild(primaryBlurb);
       }
       
@@ -2393,7 +2397,9 @@
       primaryNamesBlurb.style.fontStyle = 'normal';
       primaryNamesBlurb.style.paddingBottom = '14px';
       primaryNamesBlurb.style.borderBottom = '1px solid #f0ede7';
-      primaryNamesBlurb.textContent = `This spirit is known by many names across different cultures and religions, but is fundamentally the same demonic or angelic force.`;
+      primaryNamesBlurb.textContent = mainSpirit.type === 'Demonic Principality'
+        ? `This spirit is known by many names across different cultures and religions, but is fundamentally the same demonic principality.`
+        : `This spirit is known by many names across different cultures and religions, but is fundamentally the same demonic or angelic force.`;
       spiritProfileBody.appendChild(primaryNamesBlurb);
     }
 
