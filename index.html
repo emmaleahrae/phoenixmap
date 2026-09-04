@@ -2342,7 +2342,8 @@
 
     // Description section - show this spirit's descriptions by location,
     // matching against the full transitive identity network so cultural
-    // names like Ra/Apollo all resolve to the same underlying spirit
+    // names like Ra/Apollo all resolve to the same underlying spirit.
+    // Also track the specific local/cultural name used at each location.
     const descriptionsByLocation = [];
     for (let city of cities) {
       // Check ruling spirits - match by identity network
@@ -2351,7 +2352,8 @@
           descriptionsByLocation.push({
             description: spirit.description,
             city: city.name,
-            country: city.country
+            country: city.country,
+            localName: spirit.name
           });
         }
       }
@@ -2362,7 +2364,8 @@
           descriptionsByLocation.push({
             description: spirit.description,
             city: city.name,
-            country: city.country
+            country: city.country,
+            localName: spirit.name
           });
         }
       }
@@ -2375,7 +2378,7 @@
       descriptionsByLocation.forEach((desc, idx) => {
         const descP = document.createElement('p');
         descP.className = 'spirit-profile-description';
-        descP.innerHTML = `<strong>${desc.city}, ${desc.country}:</strong><br>${desc.description}`;
+        descP.innerHTML = `<strong>${desc.city}, ${desc.country} (as ${desc.localName}):</strong><br>${desc.description}`;
         descSection.appendChild(descP);
         
         // Add spacing between multiple descriptions
