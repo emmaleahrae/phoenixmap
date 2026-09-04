@@ -1901,8 +1901,8 @@
     top7Spirits.sort((a, b) => a.ranking - b.ranking);
 
     // Update side panel header
-    panelCity.textContent = 'Kingdom of Darkness';
-    panelSub.textContent = 'Top 7 Ranking';
+    panelCity.textContent = 'Kingdom of darkness ranking';
+    panelSub.textContent = '';
     
     // Remove any previously added info elements
     const existingInfo = panelSub.parentElement.querySelectorAll('p[data-info="true"]');
@@ -1922,7 +1922,7 @@
     explanationTitle.style.fontWeight = '500';
     explanationTitle.style.color = 'var(--ink-soft)';
     explanationTitle.style.margin = '0 0 10px 0';
-    explanationTitle.textContent = 'About the Top 7';
+    explanationTitle.textContent = 'About';
     explanationSection.appendChild(explanationTitle);
     
     const explanationText = document.createElement('p');
@@ -1946,7 +1946,7 @@
     spiritsHeader.style.fontWeight = '500';
     spiritsHeader.style.color = 'var(--ink-soft)';
     spiritsHeader.style.margin = '0 0 12px 0';
-    spiritsHeader.textContent = 'The Hierarchy';
+    spiritsHeader.textContent = 'Ranking in order of importance';
     spiritsSection.appendChild(spiritsHeader);
     
     top7Spirits.forEach((spirit, idx) => {
@@ -2064,7 +2064,7 @@
     top7Spirits.sort((a, b) => a.ranking - b.ranking);
 
     // Update modal - matches showTop7Panel format exactly
-    spiritModalTitle.textContent = 'Kingdom of Darkness - Top 7 Ranking';
+    spiritModalTitle.textContent = 'Kingdom of darkness ranking';
     spiritModalList.innerHTML = '';
 
     // Add explanation section
@@ -2079,7 +2079,7 @@
     explanationTitle.style.fontWeight = '500';
     explanationTitle.style.color = 'var(--ink-soft)';
     explanationTitle.style.margin = '0 0 10px 0';
-    explanationTitle.textContent = 'About the Top 7';
+    explanationTitle.textContent = 'About';
     explanationSection.appendChild(explanationTitle);
 
     const explanationText = document.createElement('p');
@@ -2104,7 +2104,7 @@
     spiritsHeader.style.fontWeight = '500';
     spiritsHeader.style.color = 'var(--ink-soft)';
     spiritsHeader.style.margin = '0 0 12px 0';
-    spiritsHeader.textContent = 'The Hierarchy';
+    spiritsHeader.textContent = 'Ranking in order of importance';
     spiritsSection.appendChild(spiritsHeader);
 
     top7Spirits.forEach((spirit, idx) => {
