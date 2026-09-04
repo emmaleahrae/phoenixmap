@@ -2117,11 +2117,11 @@
     let spiritType = null;
     let foundLocations = [];
 
-    // Search for the spirit in all cities - ONLY exact name match
+    // Search for the spirit in all cities - match by name OR by alias
     for (let city of cities) {
       // Check ruling spirits
       for (let spirit of city.rulingSpirits) {
-        if (spirit.name === spiritName) {
+        if (spirit.name === spiritName || (spirit.alsoKnownAs && spirit.alsoKnownAs.includes(spiritName))) {
           mainSpirit = spirit;
           spiritType = 'ruling';
           foundLocations.push({ 
@@ -2135,7 +2135,7 @@
 
       // Check demonic spirits
       for (let spirit of city.demonicPrincipalities) {
-        if (spirit.name === spiritName) {
+        if (spirit.name === spiritName || (spirit.alsoKnownAs && spirit.alsoKnownAs.includes(spiritName))) {
           mainSpirit = spirit;
           spiritType = 'demonic';
           foundLocations.push({ 
@@ -2291,16 +2291,7 @@
           altItem.style.textDecoration = 'underline';
           altItem.style.color = 'var(--ink)';
           altItem.textContent = name;
-          altItem.onclick = () => {
-            // Find spirit by name OR by alias
-            const foundSpirit = cities
-              .flatMap(c => [...c.rulingSpirits, ...c.demonicPrincipalities])
-              .find(s => s.name === name || (s.alsoKnownAs && s.alsoKnownAs.includes(name)));
-            
-            if (foundSpirit) {
-              showSpiritProfile(foundSpirit.name);
-            }
-          };
+          altItem.onclick = () => showSpiritProfile(name); // Pass the alias name directly
           altSection.appendChild(altItem);
         }
       });
