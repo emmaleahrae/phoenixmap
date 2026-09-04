@@ -1254,7 +1254,8 @@
     item.innerHTML = `<span class="legend-dot" style="background:${color}"></span>${name}`;
     
     filterButtons[name] = item;
-    updateButtonStyle(name, color, true); // Start active
+    const isActive = name !== "Top 7 Kingdom of Darkness"; // Top 7 starts inactive
+    updateButtonStyle(name, color, isActive);
     
     item.onmouseover = () => {
       item.style.boxShadow = '0 1px 3px rgba(43,38,32,0.1)';
