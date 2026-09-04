@@ -1712,7 +1712,7 @@
       
       const expandedContent = document.createElement('div');
       expandedContent.id = `demo-content-${idx}`;
-      expandedContent.style.display = 'none';
+      expandedContent.style.display = 'block';
       expandedContent.style.marginTop = '8px';
       expandedContent.style.paddingTop = '8px';
       expandedContent.style.borderTop = '1px solid #eee';
@@ -1727,53 +1727,7 @@
         expandedContent.appendChild(demoDesc);
       }
       
-      // Primary names blurb - only show if spirit has aliases
-      if (demo.alsoKnownAs && demo.alsoKnownAs.length > 0) {
-        const primaryBlurb = document.createElement('p');
-        primaryBlurb.style.fontSize = '11px';
-        primaryBlurb.style.color = '#999';
-        primaryBlurb.style.margin = '0 0 8px 0';
-        primaryBlurb.style.lineHeight = '1.4';
-        primaryBlurb.style.fontStyle = 'italic';
-        primaryBlurb.textContent = demo.type === 'Demonic Principality'
-          ? `This principality is known by many names across different cultures and religions, but is fundamentally the same demonic principality.`
-          : `This spirit is known by many names across different cultures and religions, but is fundamentally the same demonic or angelic force.`;
-        expandedContent.appendChild(primaryBlurb);
-      }
-      
-      if (demo.alsoKnownAs && demo.alsoKnownAs.length > 0) {
-        const alsoKnownContainer = document.createElement('p');
-        alsoKnownContainer.style.fontSize = '11px';
-        alsoKnownContainer.style.color = '#666';
-        alsoKnownContainer.style.margin = '0';
-        alsoKnownContainer.innerHTML = 'Also known as: ';
-        
-        demo.alsoKnownAs.forEach((altName, altIdx) => {
-          const link = document.createElement('a');
-          link.href = '#';
-          link.style.color = 'var(--accent)';
-          link.style.textDecoration = 'none';
-          link.style.cursor = 'pointer';
-          link.style.borderBottom = '1px solid var(--accent)';
-          link.textContent = altName;
-          link.onclick = (e) => {
-            e.preventDefault();
-            searchInput.value = altName;
-            searchInput.dispatchEvent(new Event('input'));
-          };
-          alsoKnownContainer.appendChild(link);
-          
-          if (altIdx < demo.alsoKnownAs.length - 1) {
-            const comma = document.createElement('span');
-            comma.textContent = ', ';
-            alsoKnownContainer.appendChild(comma);
-          }
-        });
-        
-        expandedContent.appendChild(alsoKnownContainer);
-      }
-      
-      // Toggle collapse/expand functionality
+      // Click name to open full spirit profile
       demoName.onclick = (e) => {
         e.stopPropagation();
         showSpiritProfile(demo.name);
