@@ -1222,7 +1222,7 @@
   const panelCity = document.getElementById('panelCity');
   const panelSub = document.getElementById('panelSub');
   const panelBody = document.getElementById('panelBody');
-  const activeFilters = new Set(Object.keys(categoryColors)); // All filters active by default
+  const activeFilters = new Set(Object.keys(categoryColors).filter(name => name !== "Top 7 Kingdom of Darkness")); // All filters active except Top 7 by default
   const filterButtons = {}; // Store references for updating
   
   function updateMarkerVisibility() {
