@@ -685,6 +685,14 @@
   // =================================================================
   // DATA
   // =================================================================
+
+  // Converts a rank number to its ordinal word form (1 -> "1st", 2 -> "2nd", etc.)
+  function getOrdinal(n) {
+    const suffixes = ["th", "st", "nd", "rd"];
+    const v = n % 100;
+    return n + (suffixes[(v - 20) % 10] || suffixes[v] || suffixes[0]);
+  }
+
   const categoryColors = {
     "Divine Principality": "#a9784f",
     "Demonic Principality": "#8b6f47",
@@ -1659,7 +1667,7 @@
       demoName.style.userSelect = 'none';
       demoName.style.textDecoration = 'underline';
       demoName.style.textDecorationColor = 'var(--accent)';
-      demoName.textContent = demo.name + (demo.topRanking ? ` #${demo.topRanking} in Kingdom of Darkness` : '') + ' ▶';
+      demoName.textContent = demo.name + (demo.topRanking ? ` Ranked ${getOrdinal(demo.topRanking)} in kingdom of darkness` : '') + ' ▶';
       demoName.id = `demo-${idx}`;
       demoName.title = 'Click to view spirit profile';
       demoName.onmouseover = () => {
@@ -2314,7 +2322,7 @@
       rankingTag.style.fontWeight = '600';
       rankingTag.style.cursor = 'pointer';
       rankingTag.style.textDecoration = 'underline';
-      rankingTag.textContent = `#${mainSpirit.topRanking} in Kingdom of Darkness`;
+      rankingTag.textContent = `Ranked ${getOrdinal(mainSpirit.topRanking)} in kingdom of darkness`;
       rankingTag.onclick = (e) => {
         e.stopPropagation();
         showTop7Modal();
