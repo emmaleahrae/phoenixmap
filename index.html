@@ -1295,7 +1295,10 @@
   // Define zoom levels and location types
   function getLocationZoomLevel(city) {
     if (city.country === 'Continental') return 0; // Always show continental
-    if (city.name.includes('Temple') || city.name.includes('River') || city.name.includes('Eiffel') || city.name.includes('Louvre')) return 5; // Specific monuments
+    if (city.name.includes('Temple') || city.name.includes('River') || city.name.includes('Eiffel') || city.name.includes('Louvre')) {
+      console.log(`${city.name} is a monument, zoom required: 5`);
+      return 5; // Specific monuments
+    }
     if (city.country.length > 15) return 2; // Countries (typically longer names)
     return 3; // Cities
   }
