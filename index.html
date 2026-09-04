@@ -780,7 +780,7 @@
     { name: "Temple of Isis", country: "Egypt", lat: 24.0216, lng: 32.8840, category: "Spiritual Mapping",
       date: "July 3, 2026",
       demonicPrincipalities: [
-        { name: "The Queen of Heaven", type: "Demonic Principality", description: "The spirit of envy. Loves to appear as Mother Mary. Rules over social media.", alsoKnownAs: ["Jezebel", "Isis", "Aphrodite", "Lakshmi", "Venus", "Mother Mary"], topRanking: 3 }
+        { name: "The Queen of Heaven", type: "Demonic Principality", description: "The spirit of Isis", mainDescription: "The spirit of envy. Loves to appear as Mother Mary. Rules over social media.", alsoKnownAs: ["Jezebel", "Isis", "Aphrodite", "Lakshmi", "Venus", "Mother Mary"], topRanking: 3 }
       ],
       rulingSpirits: [
         { name: "Gabriel", type: "Angelic Principality", description: "Archangel of spreading the gospel" }
@@ -2188,15 +2188,15 @@
       headerContent.appendChild(rankingTag);
     }
     
-    // Add main spirit description
-    if (mainSpirit.description) {
+    // Add main spirit description (use mainDescription if available, otherwise use description)
+    if (mainSpirit.mainDescription || mainSpirit.description) {
       const mainDesc = document.createElement('p');
       mainDesc.className = 'spirit-profile-main-description';
       mainDesc.style.fontSize = '12px';
       mainDesc.style.color = 'var(--ink-soft)';
       mainDesc.style.margin = '8px 0 0 0';
       mainDesc.style.lineHeight = '1.4';
-      mainDesc.textContent = mainSpirit.description;
+      mainDesc.textContent = mainSpirit.mainDescription || mainSpirit.description;
       headerContent.appendChild(mainDesc);
     }
     
@@ -2226,12 +2226,12 @@
     manifestHeader.textContent = 'Manifestations in:';
     spiritProfileBody.appendChild(manifestHeader);
 
-    // Description section - show only this spirit's descriptions by location (exclude topRanking entries which are main descriptions)
+    // Description section - show only this spirit's descriptions by location
     const descriptionsByLocation = [];
     for (let city of cities) {
       // Check ruling spirits - only match the main spirit's name
       for (let spirit of city.rulingSpirits) {
-        if (spirit.name === mainSpirit.name && !spirit.topRanking) {
+        if (spirit.name === mainSpirit.name) {
           descriptionsByLocation.push({
             description: spirit.description,
             city: city.name,
@@ -2242,7 +2242,7 @@
 
       // Check demonic spirits - only match the main spirit's name
       for (let spirit of city.demonicPrincipalities) {
-        if (spirit.name === mainSpirit.name && !spirit.topRanking) {
+        if (spirit.name === mainSpirit.name) {
           descriptionsByLocation.push({
             description: spirit.description,
             city: city.name,
