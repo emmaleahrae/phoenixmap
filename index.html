@@ -694,6 +694,11 @@
     "Top 7 Kingdom of Darkness": "#d4a574"
   };
 
+  // Top 7 spirits not yet tied to a specific location on the map
+  const unassignedTop7Spirits = [
+    { name: "Ouranos", type: "Demonic Principality", description: "", alsoKnownAs: [], topRanking: 7 }
+  ];
+
   const cities = [
     { name: "Lisbon", country: "Portugal", lat: 38.7223, lng: -9.1393, category: "Spiritual Mapping",
       date: "August 21, 2026",
@@ -1869,6 +1874,16 @@
         }
       });
     });
+    unassignedTop7Spirits.forEach(spirit => {
+      if (spirit.topRanking && !top7Spirits.find(s => s.name === spirit.name)) {
+        top7Spirits.push({
+          name: spirit.name,
+          ranking: spirit.topRanking,
+          description: spirit.description,
+          aliases: spirit.alsoKnownAs || []
+        });
+      }
+    });
 
     // Sort by ranking
     top7Spirits.sort((a, b) => a.ranking - b.ranking);
@@ -2021,6 +2036,16 @@
           });
         }
       });
+    });
+    unassignedTop7Spirits.forEach(spirit => {
+      if (spirit.topRanking && !top7Spirits.find(s => s.name === spirit.name)) {
+        top7Spirits.push({
+          name: spirit.name,
+          ranking: spirit.topRanking,
+          description: spirit.description,
+          aliases: spirit.alsoKnownAs || []
+        });
+      }
     });
 
     // Sort by ranking
@@ -2179,6 +2204,16 @@
             date: city.date,
             type: spiritType 
           });
+        }
+      }
+    }
+
+    // Check spirits not yet tied to a location (e.g. Top 7 spirits pending location data)
+    if (!mainSpirit) {
+      for (let spirit of unassignedTop7Spirits) {
+        if (spirit.name === spiritName || (spirit.alsoKnownAs && spirit.alsoKnownAs.includes(spiritName))) {
+          mainSpirit = spirit;
+          spiritType = 'demonic';
         }
       }
     }
