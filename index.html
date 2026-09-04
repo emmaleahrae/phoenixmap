@@ -1456,12 +1456,19 @@
       
       // Handle both single videoUrl and multiple videoUrls
       const urls = city.videoUrls || (city.videoUrl ? [city.videoUrl] : []);
+      const top7PostUrl = 'https://www.instagram.com/p/DXVP3z0DyyO';
       urls.forEach((url, idx) => {
         const link = document.createElement('a');
         link.className = 'video-link';
         link.href = url;
         link.target = '_blank';
-        link.textContent = urls.length > 1 ? `View Part ${idx + 1} Post on Instagram ↗` : 'View Post on Instagram ↗';
+        
+        // Check if this is the Top 7 post
+        if (url === top7PostUrl) {
+          link.textContent = 'Top 7 of Satan\'s Kingdom of Darkness Explained ↗';
+        } else {
+          link.textContent = urls.length > 1 ? `View Part ${idx + 1} Post on Instagram ↗` : 'View Post on Instagram ↗';
+        }
         cardFooter.appendChild(link);
       });
       
