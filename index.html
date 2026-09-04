@@ -2381,6 +2381,18 @@
       }
     }
 
+    // Add Top 7 explanation post if this spirit is in the Kingdom of Darkness
+    if (mainSpirit.topRanking) {
+      instagramPosts.push({ 
+        url: 'https://www.instagram.com/p/DXVP3z0DyyO', 
+        city: 'Kingdom of Darkness', 
+        country: 'Explanation', 
+        isTop7: true,
+        urlIndex: 0, 
+        totalUrlsForCity: 1 
+      });
+    }
+
     if (instagramPosts.length > 0) {
       const instSection = document.createElement('div');
       instSection.className = 'spirit-profile-section';
@@ -2412,15 +2424,19 @@
           postLink.style.background = '#f9f7f4';
         };
         
+        // Show Part X if the location has multiple posts, or Top 7 label
         const postCity = document.createElement('p');
         postCity.style.fontWeight = '500';
         postCity.style.fontSize = '12px';
         postCity.style.margin = '0 0 2px 0';
         postCity.style.color = 'var(--ink)';
         
-        // Show Part X if the location has multiple posts
-        const partNumber = post.totalUrlsForCity > 1 ? ` - Part ${post.urlIndex + 1}` : '';
-        postCity.textContent = `${post.city}, ${post.country}${partNumber}`;
+        if (post.isTop7) {
+          postCity.textContent = 'Top 7 of Kingdom of Darkness';
+        } else {
+          const partNumber = post.totalUrlsForCity > 1 ? ` - Part ${post.urlIndex + 1}` : '';
+          postCity.textContent = `${post.city}, ${post.country}${partNumber}`;
+        }
         
         const postLabel = document.createElement('p');
         postLabel.style.fontSize = '11px';
