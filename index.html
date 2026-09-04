@@ -2263,11 +2263,13 @@
 
     // Add primary names blurb before alternate names
     const primaryNamesBlurb = document.createElement('p');
-    primaryNamesBlurb.style.fontSize = '11px';
-    primaryNamesBlurb.style.color = '#999';
-    primaryNamesBlurb.style.margin = '12px 0 12px 0';
-    primaryNamesBlurb.style.lineHeight = '1.4';
-    primaryNamesBlurb.style.fontStyle = 'italic';
+    primaryNamesBlurb.style.fontSize = '12px';
+    primaryNamesBlurb.style.color = 'var(--ink-soft)';
+    primaryNamesBlurb.style.margin = '0 0 14px 0';
+    primaryNamesBlurb.style.lineHeight = '1.5';
+    primaryNamesBlurb.style.fontStyle = 'normal';
+    primaryNamesBlurb.style.paddingBottom = '14px';
+    primaryNamesBlurb.style.borderBottom = '1px solid #f0ede7';
     primaryNamesBlurb.textContent = `This spirit is known by many names across different cultures and religions, but is fundamentally the same demonic or angelic force.`;
     spiritProfileBody.appendChild(primaryNamesBlurb);
 
