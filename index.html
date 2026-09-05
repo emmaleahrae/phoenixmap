@@ -1283,6 +1283,18 @@
       creator: "@phoenixfromphoenixx",
       caption: "God sends Phoenix and Cody to Rome to defeat the strong hold Zeus, the Queen of Heaven and the Baphomet has over it.",
       videoUrls: ["https://www.instagram.com/p/DSBDuTQEnuD", "https://www.instagram.com/p/DSBEE2eEmS_", "https://www.instagram.com/p/DSBEgUkEnZo"]
+    },
+    { name: "Vatican", country: "Vatican City", lat: 41.90278, lng: 12.45250, category: "Spiritual Mapping",
+      date: "August 31, 2025",
+      demonicPrincipalities: [
+        { name: "Abaddon", type: "Demonic Principality", description: "Abaddon physical body (his spiritual body is still free to roam the earth) is imprisoned miles under the Vatican until his appointed time to be loosed upon the earth. See <em>Revelation 9:11 - They have a king over them the angel of the bottomless pit. His name in Hebrew is Abaddon, and in Greek he is called Apollyon</em>", alsoKnownAs: ["Lucifer", "Apollo", "Ra", "Nergal", "Frey", "Shiva", "Heylel"] }
+      ],
+      rulingSpirits: [
+        { name: "The Grand Protector", type: "Angelic Principality", description: "Angelic spirit of protecting the one true faith" }
+      ],
+      creator: "@phoenixfromphoenixx",
+      caption: "Through a vision the Holy Spirit shows Phoenix how Abaddon's physical body is chained under the Vatican",
+      videoUrls: ["https://www.instagram.com/p/DSBEgUkEnZo"]
     }
   ];
 
@@ -1790,7 +1802,7 @@
         demoDesc.style.color = 'var(--ink-soft)';
         demoDesc.style.margin = '0 0 8px 0';
         demoDesc.style.lineHeight = '1.4';
-        demoDesc.textContent = demo.description;
+        demoDesc.innerHTML = demo.description;
         expandedContent.appendChild(demoDesc);
       }
       
@@ -2897,7 +2909,9 @@
         descP.appendChild(locationSuffix);
 
         descP.appendChild(document.createElement('br'));
-        descP.appendChild(document.createTextNode(desc.description));
+        const descTextSpan = document.createElement('span');
+        descTextSpan.innerHTML = desc.description;
+        descP.appendChild(descTextSpan);
 
         descSection.appendChild(descP);
         
