@@ -1552,9 +1552,10 @@
         }) ||
         city.demonicPrincipalities.some(s => {
           const matchesType = activeFilters.has(s.type);
+          const matchesSecondaryType = s.secondaryType && activeFilters.has(s.secondaryType);
           const isTop7 = s.topRanking !== undefined;
           const matchesTop7 = activeFilters.has("Top 7 kingdom of darkness") && isTop7;
-          return matchesType || matchesTop7;
+          return matchesType || matchesSecondaryType || matchesTop7;
         });
       
       // If user actively filtered, show all matching spirits regardless of zoom
@@ -1918,7 +1919,7 @@
       const demoTypeTag = document.createElement('p');
       demoTypeTag.style.fontSize = '10px';
       demoTypeTag.style.color = 'var(--accent)';
-      demoTypeTag.style.margin = '8px 0 0 0';
+      demoTypeTag.style.margin = '8px 8px 0 0';
       demoTypeTag.style.textTransform = 'uppercase';
       demoTypeTag.style.letterSpacing = '0.02em';
       demoTypeTag.style.cursor = 'pointer';
@@ -1933,6 +1934,26 @@
       demoItem.appendChild(demoName);
       demoItem.appendChild(expandedContent);
       demoItem.appendChild(demoTypeTag);
+
+      // Secondary type tag - only shown if this spirit has a dual classification
+      if (demo.secondaryType) {
+        const demoSecondaryTypeTag = document.createElement('p');
+        demoSecondaryTypeTag.style.fontSize = '10px';
+        demoSecondaryTypeTag.style.color = categoryColors[demo.secondaryType] || 'var(--accent)';
+        demoSecondaryTypeTag.style.margin = '8px 0 0 0';
+        demoSecondaryTypeTag.style.textTransform = 'uppercase';
+        demoSecondaryTypeTag.style.letterSpacing = '0.02em';
+        demoSecondaryTypeTag.style.cursor = 'pointer';
+        demoSecondaryTypeTag.style.borderBottom = `1px solid ${categoryColors[demo.secondaryType] || 'var(--accent)'}`;
+        demoSecondaryTypeTag.style.display = 'inline-block';
+        demoSecondaryTypeTag.textContent = demo.secondaryType;
+        demoSecondaryTypeTag.onclick = (e) => {
+          e.stopPropagation();
+          showSpiritTypeModal(demo.secondaryType);
+        };
+        demoItem.appendChild(demoSecondaryTypeTag);
+      }
+
       demoSection.appendChild(demoItem);
     });
     
@@ -1998,7 +2019,7 @@
         }
       });
       city.demonicPrincipalities.forEach(spirit => {
-        if (spirit.type === spiritType) {
+        if (spirit.type === spiritType || spirit.secondaryType === spiritType) {
           if (!spiritMap[spirit.name]) {
             spiritMap[spirit.name] = [];
           }
@@ -2830,7 +2851,7 @@
     
     const typeTag = document.createElement('p');
     typeTag.className = 'spirit-profile-type';
-    typeTag.textContent = mainSpirit.type; // Just show the type as-is
+    typeTag.textContent = mainSpirit.secondaryType ? `${mainSpirit.type} / ${mainSpirit.secondaryType}` : mainSpirit.type;
     
     headerContent.appendChild(title);
     headerContent.appendChild(typeTag);
